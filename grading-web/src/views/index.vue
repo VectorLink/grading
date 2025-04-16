@@ -14,8 +14,7 @@
           重庆市大足区龙岗幼儿园于1957年建园，历经近百年的发展变迁，具体历史变革见图
         </p>
         <el-image
-          :src="historyImg"
-          :fit="cover"></el-image>
+          :src="historyImg"></el-image>
       </el-col>
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>组织机构</h2>
@@ -23,8 +22,7 @@
           重庆市大足区龙岗幼儿园的组织机构见图
         </p>
         <el-image
-          :src="organImg"
-          :fit="cover"></el-image>
+          :src="organImg"></el-image>
       </el-col>
     </el-row>
   </div>
