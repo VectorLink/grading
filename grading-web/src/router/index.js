@@ -182,6 +182,43 @@ export const constantRoutes = [
         meta: {title: '重庆市大足区龙岗幼儿园教师家访家长满意度问卷调查',icon: 'user'}
       },
     ]
+  },{
+    path: '/teacher',
+    component: Layout,
+    redirect: "noredirect",
+    hidden: true,
+    children: [
+      {
+        path: 'teacher',
+        component:()=> import('@/views/teacher/teacher/index'),
+        name: 'Teacher',
+        meta: {title: '重庆市大足区龙岗幼儿园教师月绩效考核细则',icon: 'user'}
+      },
+      {
+        path: 'childcareTeacher',
+        component:()=> import('@/views/teacher/childcareteacher/index'),
+        name: 'ChildcareTeacher',
+        meta: {title: '重庆市大足区龙岗幼儿园保育教师月绩效考核细则',icon: 'user'}
+      },
+      {
+        path: 'canteenStaff',
+        component:()=> import('@/views/teacher/canteenstaff/index'),
+        name: 'CanteenStaff',
+        meta: {title: '重庆市大足区龙岗幼儿园食堂人员月绩效考核细则',icon: 'user'}
+      },
+      {
+        path: 'securityGuard',
+        component:()=> import('@/views/teacher/securityguard/index'),
+        name: 'SecurityGuard',
+        meta: {title: '重庆市大足区龙岗幼儿园保安人员工作考核评细',icon: 'user'}
+      },
+      {
+        path: 'morality',
+        component:()=> import('@/views/teacher/morality/index'),
+        name: 'Morality',
+        meta: {title: '重庆市大足区龙岗幼儿园学年度师德师风考核评价表',icon: 'user'}
+      }
+    ]
   }
 ]
 
