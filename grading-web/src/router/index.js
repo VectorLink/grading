@@ -87,6 +87,101 @@ export const constantRoutes = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
+  },
+  {
+    path: '/child',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'biggerGarden',
+        component:()=> import('@/views/child/biggergarden/index'),
+        name: 'BiggerGarden',
+        meta: {title: '大班幼儿评教表',icon: 'user'}
+      },
+      {
+        path: 'middleGarden',
+        component:()=> import('@/views/child/middlegarden/index'),
+        name: 'MiddleGarden',
+        meta: {title: '中班班幼儿评教表',icon: 'user'}
+      },
+      {
+        path: 'smallGarden',
+        component:()=> import('@/views/child/smallgarden/index'),
+        name: 'SmallGarden',
+        meta: {title: '小班幼儿评教表',icon: 'user'}
+      },
+      {
+        path: 'childFeedback',
+        component:()=> import('@/views/child/childfeedback/index'),
+        name: 'ChildFeedback',
+        meta: {title: '儿童委员会评价反馈表',icon: 'user'}
+      },
+      {
+        path: 'childEvaluationForm',
+        component:()=> import('@/views/child/childevaluationform/index'),
+        name: 'ChildEvaluationForm',
+        meta: {title: '大足区龙岗幼儿园儿童委员会评价表',icon: 'user'}
+      }
+    ]
+  },{
+    path: '/expert',
+    component: Layout,
+    hidden: true,
+    redirect: "noredirect",
+    children: [
+      {
+        path: 'expertDoor',
+        component:()=> import('@/views/export/door/index'),
+        name: 'ExpertDoor',
+        meta: {title: '大足区龙岗幼儿园幸福推门听课评分表',icon: 'user'}
+      },
+      {
+        path: 'expertClass',
+        component:()=> import('@/views/export/class/index'),
+        name: 'ExpertClass',
+        meta: {title: '大足区龙岗幼儿园幸福赛课评分表',icon: 'user'}
+      }
+    ]
+  },
+  {
+    path: '/parents',
+    component: Layout,
+    hidden: true,
+    redirect: "noredirect",
+    children: [
+      {
+        path: 'activities',
+        component:()=> import('@/views/parents/activities/index'),
+        name: 'Activities',
+        meta: {title: '大足区龙岗幼儿园各类活动家长评价检核表',icon: 'user'}
+      },
+      {
+        path: 'childActivities',
+        component:()=> import('@/views/parents/childactivities/index'),
+        name: 'ChildActivities',
+        meta: {title: '重庆市大足区龙岗幼儿园亲子活动家长满意度问卷调查',icon: 'user'}
+      },
+      {
+        path: 'smallerConference',
+        component:()=> import('@/views/parents/smallerconference/index'),
+        name: 'SmallerConference',
+        meta: {title: '重庆市大足区龙岗幼儿园2024小班家长开放日家长满意度问卷调查',icon: 'user'}
+      },
+      {
+        path: 'biggerConference',
+        component:()=> import('@/views/parents/biggerconference/index'),
+        name: 'BiggerConference',
+        meta: {title: '重庆市大足区龙岗幼儿园2024秋季大班家长会家长满意度问卷调查',icon: 'user'}
+      },
+      {
+        path: 'homeVisit',
+        component:()=> import('@/views/parents/homevisit/index'),
+        name: 'HomeVisit',
+        meta: {title: '重庆市大足区龙岗幼儿园教师家访家长满意度问卷调查',icon: 'user'}
+      },
+    ]
   }
 ]
 
