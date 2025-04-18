@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grading.system.mapper.GradingTemplateMetaMapper">
+    
+    <resultMap type="GradingTemplateMeta" id="GradingTemplateMetaResult">
+        <result property="id"    column="id"    />
+        <result property="templateId"    column="template_id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="permValid"    column="perm_valid"    />
+        <result property="rightCode"    column="right_code"    />
+        <result property="sort"    column="sort"    />
+    </resultMap>
+
+    <sql id="selectGradingTemplateMetaVo">
+        select id, template_id, code, name, perm_valid, right_code, sort from grading_template_meta
+    </sql>
+
+    <select id="selectGradingTemplateMetaList" parameterType="GradingTemplateMeta" resultMap="GradingTemplateMetaResult">
+        <include refid="selectGradingTemplateMetaVo"/>
+        <where>  
+            <if test="templateId != null "> and template_id = #{templateId}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="permValid != null "> and perm_valid = #{permValid}</if>
+            <if test="rightCode != null  and rightCode != ''"> and right_code = #{rightCode}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectGradingTemplateMetaById" parameterType="Long" resultMap="GradingTemplateMetaResult">
+        <include refid="selectGradingTemplateMetaVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGradingTemplateMeta" parameterType="GradingTemplateMeta" useGeneratedKeys="true" keyProperty="id">
+        insert into grading_template_meta
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">template_id,</if>
+            <if test="code != null and code != ''">code,</if>
+            <if test="name != null">name,</if>
+            <if test="permValid != null">perm_valid,</if>
+            <if test="rightCode != null">right_code,</if>
+            <if test="sort != null">sort,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateId != null">#{templateId},</if>
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="permValid != null">#{permValid},</if>
+            <if test="rightCode != null">#{rightCode},</if>
+            <if test="sort != null">#{sort},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGradingTemplateMeta" parameterType="GradingTemplateMeta">
+        update grading_template_meta
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateId != null">template_id = #{templateId},</if>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="permValid != null">perm_valid = #{permValid},</if>
+            <if test="rightCode != null">right_code = #{rightCode},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGradingTemplateMetaById" parameterType="Long">
+        delete from grading_template_meta where id = #{id}
+    </delete>
+
+    <delete id="deleteGradingTemplateMetaByIds" parameterType="String">
+        delete from grading_template_meta where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

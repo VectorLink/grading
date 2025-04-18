@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grading.system.mapper.GradingContentMapper">
+    
+    <resultMap type="GradingContent" id="GradingContentResult">
+        <result property="id"    column="id"    />
+        <result property="templateMetaId"    column="template_meta_id"    />
+        <result property="systemValue"    column="system_value"    />
+        <result property="value"    column="value"    />
+        <result property="rowId"    column="row_id"    />
+        <result property="mergeColumn"    column="merge_column"    />
+        <result property="rowColumn"    column="merge_row"    />
+    </resultMap>
+
+    <sql id="selectGradingContentVo">
+        select id, template_meta_id, system_value, value, row_id, merge_column, merge_row from grading_content
+    </sql>
+
+    <select id="selectGradingContentList" parameterType="GradingContent" resultMap="GradingContentResult">
+        <include refid="selectGradingContentVo"/>
+        <where>  
+            <if test="templateMetaId != null "> and template_meta_id = #{templateMetaId}</if>
+            <if test="systemValue != null "> and system_value = #{systemValue}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="rowId != null "> and row_id = #{rowId}</if>
+            <if test="mergeColumn != null "> and merge_column = #{mergeColumn}</if>
+            <if test="rowColumn != null "> and merge_row = #{rowColumn}</if>
+        </where>
+    </select>
+    
+    <select id="selectGradingContentById" parameterType="Long" resultMap="GradingContentResult">
+        <include refid="selectGradingContentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGradingContent" parameterType="GradingContent" useGeneratedKeys="true" keyProperty="id">
+        insert into grading_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="templateMetaId != null">template_meta_id,</if>
+            <if test="systemValue != null">system_value,</if>
+            <if test="value != null">value,</if>
+            <if test="rowId != null">row_id,</if>
+            <if test="mergeColumn != null">merge_column,</if>
+            <if test="rowColumn != null">merge_row,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="templateMetaId != null">#{templateMetaId},</if>
+            <if test="systemValue != null">#{systemValue},</if>
+            <if test="value != null">#{value},</if>
+            <if test="rowId != null">#{rowId},</if>
+            <if test="mergeColumn != null">#{mergeColumn},</if>
+            <if test="rowColumn != null">#{rowColumn},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGradingContent" parameterType="GradingContent">
+        update grading_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="templateMetaId != null">template_meta_id = #{templateMetaId},</if>
+            <if test="systemValue != null">system_value = #{systemValue},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="rowId != null">row_id = #{rowId},</if>
+            <if test="mergeColumn != null">merge_column = #{mergeColumn},</if>
+            <if test="rowColumn != null">merge_row = #{rowColumn},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGradingContentById" parameterType="Long">
+        delete from grading_content where id = #{id}
+    </delete>
+
+    <delete id="deleteGradingContentByIds" parameterType="String">
+        delete from grading_content where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
