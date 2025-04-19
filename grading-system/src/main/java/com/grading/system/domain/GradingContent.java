@@ -1,9 +1,11 @@
 package com.grading.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import java.io.Serializable;
 import com.grading.common.annotation.Excel;
-import com.grading.common.core.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 考核内容值对象 grading_content
@@ -11,8 +13,11 @@ import com.grading.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2025-04-18
  */
-public class GradingContent extends BaseEntity
-{
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class GradingContent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
@@ -28,7 +33,7 @@ public class GradingContent extends BaseEntity
 
     /** 内容 */
     @Excel(name = "内容")
-    private String value;
+    private String content;
 
     /** 行号 */
     @Excel(name = "行号")
@@ -40,88 +45,6 @@ public class GradingContent extends BaseEntity
 
     /** 行合并 */
     @Excel(name = "行合并")
-    private Integer rowColumn;
+    private Integer mergeRow;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
-
-    public Long getId() 
-    {
-        return id;
-    }
-
-    public void setTemplateMetaId(Long templateMetaId) 
-    {
-        this.templateMetaId = templateMetaId;
-    }
-
-    public Long getTemplateMetaId() 
-    {
-        return templateMetaId;
-    }
-
-    public void setSystemValue(Integer systemValue) 
-    {
-        this.systemValue = systemValue;
-    }
-
-    public Integer getSystemValue() 
-    {
-        return systemValue;
-    }
-
-    public void setValue(String value) 
-    {
-        this.value = value;
-    }
-
-    public String getValue() 
-    {
-        return value;
-    }
-
-    public void setRowId(Integer rowId) 
-    {
-        this.rowId = rowId;
-    }
-
-    public Integer getRowId() 
-    {
-        return rowId;
-    }
-
-    public void setMergeColumn(Integer mergeColumn) 
-    {
-        this.mergeColumn = mergeColumn;
-    }
-
-    public Integer getMergeColumn() 
-    {
-        return mergeColumn;
-    }
-
-    public void setRowColumn(Integer rowColumn) 
-    {
-        this.rowColumn = rowColumn;
-    }
-
-    public Integer getRowColumn() 
-    {
-        return rowColumn;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("templateMetaId", getTemplateMetaId())
-            .append("systemValue", getSystemValue())
-            .append("value", getValue())
-            .append("rowId", getRowId())
-            .append("mergeColumn", getMergeColumn())
-            .append("rowColumn", getRowColumn())
-            .toString();
-    }
 }

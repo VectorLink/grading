@@ -1,7 +1,10 @@
 package com.grading.system.mapper;
 
 import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.grading.system.domain.GradingContent;
+import com.grading.system.model.bo.GradingContentMeta;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 考核内容值Mapper接口
@@ -9,53 +12,11 @@ import com.grading.system.domain.GradingContent;
  * @author ruoyi
  * @date 2025-04-18
  */
-public interface GradingContentMapper 
-{
+public interface GradingContentMapper extends BaseMapper<GradingContent> {
     /**
-     * 查询考核内容值
-     * 
-     * @param id 考核内容值主键
-     * @return 考核内容值
+     * 根据考核表获取获取考核内容
+     * @param gradingId
+     * @return
      */
-    public GradingContent selectGradingContentById(Long id);
-
-    /**
-     * 查询考核内容值列表
-     * 
-     * @param gradingContent 考核内容值
-     * @return 考核内容值集合
-     */
-    public List<GradingContent> selectGradingContentList(GradingContent gradingContent);
-
-    /**
-     * 新增考核内容值
-     * 
-     * @param gradingContent 考核内容值
-     * @return 结果
-     */
-    public int insertGradingContent(GradingContent gradingContent);
-
-    /**
-     * 修改考核内容值
-     * 
-     * @param gradingContent 考核内容值
-     * @return 结果
-     */
-    public int updateGradingContent(GradingContent gradingContent);
-
-    /**
-     * 删除考核内容值
-     * 
-     * @param id 考核内容值主键
-     * @return 结果
-     */
-    public int deleteGradingContentById(Long id);
-
-    /**
-     * 批量删除考核内容值
-     * 
-     * @param ids 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteGradingContentByIds(Long[] ids);
+    List<GradingContentMeta> listGradingContentByGradingId(@Param("gradingId") Long gradingId,@Param("titleMetaCodes") List<String> titleMetaCodes);
 }

@@ -1,9 +1,7 @@
 package com.grading.system.model.resp;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grading.system.model.bo.GradingContentMeta;
 import com.grading.system.model.bo.GradingTitleMeta;
 import lombok.Data;
@@ -22,10 +20,9 @@ public class UserGradingResp implements Serializable {
      */
     private String gradingName;
     /**
-     * 考核日期
+     * 考核月份
      */
-    @JsonFormat( pattern = "yyyy-MM")
-    private LocalDate gradingDate;
+    private String gradingMonth;
     /**
      * 标题
      */

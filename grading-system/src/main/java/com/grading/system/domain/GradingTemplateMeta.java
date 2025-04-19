@@ -1,7 +1,6 @@
 package com.grading.system.domain;
 
 import com.grading.common.annotation.Excel;
-import com.grading.common.core.domain.BaseEntity;
 import lombok.Data;
 
 /**
@@ -11,8 +10,7 @@ import lombok.Data;
  * @date 2025-04-18
  */
 @Data
-public class GradingTemplateMeta extends BaseEntity
-{
+public class GradingTemplateMeta {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
@@ -32,7 +30,7 @@ public class GradingTemplateMeta extends BaseEntity
 
     /** 是否校验权限 */
     @Excel(name = "是否校验权限")
-    private Integer permValid;
+    private Boolean permValid;
 
     /** 权限码 */
     @Excel(name = "权限码")

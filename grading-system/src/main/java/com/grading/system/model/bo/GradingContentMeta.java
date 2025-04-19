@@ -31,4 +31,8 @@ public class GradingContentMeta implements Serializable {
      * 合并行
      */
     private Boolean mergeRow;
+    /**
+     * 内容
+     */
+    private String content;
 }

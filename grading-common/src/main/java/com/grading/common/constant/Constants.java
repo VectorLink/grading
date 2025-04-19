@@ -1,5 +1,6 @@
 package com.grading.common.constant;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import io.jsonwebtoken.Claims;
 
@@ -170,4 +171,8 @@ public class Constants
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.grading.common.utils.file", "com.grading.common.config", "com.ruoyi.generator" };
+    /**
+     * 考核月份格式化
+     */
+    public static final String GRADING_MONTH_PATTERN="yyyyMM";
 }

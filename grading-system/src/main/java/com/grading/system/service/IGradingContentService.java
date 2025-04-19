@@ -1,7 +1,11 @@
 package com.grading.system.service;
 
 import java.util.List;
+import java.util.Set;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.grading.system.domain.GradingContent;
+import com.grading.system.domain.GradingTemplateMeta;
+import com.grading.system.model.bo.GradingContentMeta;
 
 /**
  * 考核内容值Service接口
@@ -9,53 +13,19 @@ import com.grading.system.domain.GradingContent;
  * @author ruoyi
  * @date 2025-04-18
  */
-public interface IGradingContentService 
-{
+public interface IGradingContentService extends IService<GradingContent> {
     /**
-     * 查询考核内容值
-     * 
-     * @param id 考核内容值主键
-     * @return 考核内容值
+     * 根据考核表Id获取考核内容信息
+     * @param gradingId 考核表Id
+     * @param titleMetaCodes 表格权限码
+     * @return
      */
-    public GradingContent selectGradingContentById(Long id);
+    List<GradingContentMeta> listGradingContentByGradingId(Long gradingId, List<String> titleMetaCodes);
 
     /**
-     * 查询考核内容值列表
-     * 
-     * @param gradingContent 考核内容值
-     * @return 考核内容值集合
+     * 插入模版系统级参数
+     * @param gradingId
+     * @param gradingTemplateMetas
      */
-    public List<GradingContent> selectGradingContentList(GradingContent gradingContent);
-
-    /**
-     * 新增考核内容值
-     * 
-     * @param gradingContent 考核内容值
-     * @return 结果
-     */
-    public int insertGradingContent(GradingContent gradingContent);
-
-    /**
-     * 修改考核内容值
-     * 
-     * @param gradingContent 考核内容值
-     * @return 结果
-     */
-    public int updateGradingContent(GradingContent gradingContent);
-
-    /**
-     * 批量删除考核内容值
-     * 
-     * @param ids 需要删除的考核内容值主键集合
-     * @return 结果
-     */
-    public int deleteGradingContentByIds(Long[] ids);
-
-    /**
-     * 删除考核内容值信息
-     * 
-     * @param id 考核内容值主键
-     * @return 结果
-     */
-    public int deleteGradingContentById(Long id);
+    List<GradingContent> createSystemContent(Long gradingId, List<GradingTemplateMeta> gradingTemplateMetas);
 }
