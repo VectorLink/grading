@@ -27,5 +27,5 @@ public interface IGradingContentService extends IService<GradingContent> {
      * @param gradingId
      * @param gradingTemplateMetas
      */
-    List<GradingContent> createSystemContent(Long gradingId, List<GradingTemplateMeta> gradingTemplateMetas);
+    List<GradingContent> createContent(Long gradingId, List<GradingTemplateMeta> gradingTemplateMetas);
 }

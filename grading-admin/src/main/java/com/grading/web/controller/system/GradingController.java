@@ -25,7 +25,6 @@ public class GradingController extends BaseController {
 
     @ApiOperation("获取用户考核表")
     @PostMapping("/getUserGrading")
-
     public AjaxResult getUserGrading(@RequestBody GradingUserParam param) {
         return AjaxResult.success(gradingService.getUserGrading(param));
     }

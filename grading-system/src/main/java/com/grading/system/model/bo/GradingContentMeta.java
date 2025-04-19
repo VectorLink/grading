@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GradingContentMeta implements Serializable {
+
+    /**
+     * 内容Id
+     */
+    private  String contentId;
     /**
      * 编码
      */

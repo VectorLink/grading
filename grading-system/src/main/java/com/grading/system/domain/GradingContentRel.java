@@ -3,6 +3,8 @@ package com.grading.system.domain;
 import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.grading.common.annotation.Excel;
 import com.grading.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,7 @@ public class GradingContentRel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /** 评价表Id */

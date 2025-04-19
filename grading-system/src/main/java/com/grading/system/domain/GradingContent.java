@@ -1,6 +1,8 @@
 package com.grading.system.domain;
 
 import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.grading.common.annotation.Excel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,7 @@ public class GradingContent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /** 元数据Id */

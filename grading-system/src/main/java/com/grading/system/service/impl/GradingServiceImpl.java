@@ -130,7 +130,7 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
             saveOrUpdate(newInstance);
 
             //插入系统级参数
-            List<GradingContent> systemContent = iGradingContentService.createSystemContent(newInstance.getId(), gradingTemplateMetas);
+            List<GradingContent> systemContent = iGradingContentService.createContent(newInstance.getId(), gradingTemplateMetas);
             Map<Long, String> metaMap = gradingTemplateMetas.stream().collect(Collectors.toMap(GradingTemplateMeta::getId, GradingTemplateMeta::getCode));
             List<GradingContentMeta> contentMetas = systemContent.stream().map(
                     l -> GradingContentMeta.builder()
@@ -140,6 +140,7 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
                             .rowId(l.getRowId())
                             .systemValue(BooleanUtils.toBoolean(l.getSystemValue()))
                             .titleCode(Optional.ofNullable(metaMap.get(l.getTemplateMetaId())).orElse(StringUtils.EMPTY))
+                            .contentId(l.getId().toString())
                             .build()
             ).collect(Collectors.toList());
 

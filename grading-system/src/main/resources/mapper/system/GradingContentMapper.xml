@@ -9,7 +9,8 @@
                gc.system_value as systemValue,
                gc.row_id       as rowId,
                gc.merge_column,
-               gc.merge_row
+               gc.merge_row,
+               gc.id           as contentId
         from grading_content_rel gcr
                  left join grading_content gc on gcr.content_id = gc.id
                  left join grading_template_meta gtm on gc.template_meta_id = gtm.id

@@ -3,6 +3,8 @@ package com.grading.system.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.grading.common.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +30,7 @@ public class Grading implements Serializable {
     /**
      * 主键
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
