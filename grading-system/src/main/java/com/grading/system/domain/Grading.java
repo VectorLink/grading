@@ -75,4 +75,20 @@ public class Grading implements Serializable {
      * @see
      */
     private Integer gradingType;
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
+    /**
+     * 创建人Id
+     */
+    private Long createUserId;
+    /**
+     * 更新人Id
+     */
+    private Long updateUserId;
 }

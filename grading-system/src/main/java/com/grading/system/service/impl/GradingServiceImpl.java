@@ -124,11 +124,17 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
                     .gradingType(param.getType())
                     .gradingName(gradingTypeEnum.getName())
                     .userId(param.getUserId())
+                    .createUserId(loginUser.getUserId())
+                    .createTime(LocalDateTime.now())
+                    .updateTime(LocalDateTime.now())
+                    .updateUserId(loginUser.getUserId())
                     .build();
             newInstance.setStatus(BooleanUtils.toInteger(LocalDateTime.now().compareTo(newInstance.getGradingStartTime()) > 0
                     && LocalDateTime.now().compareTo(newInstance.getGradingEndTime()) < 0));
             saveOrUpdate(newInstance);
-
+            userGradingResp.setUserId(param.getUserId());
+            userGradingResp.setGradingName(newInstance.getGradingName());
+            userGradingResp.setGradingMonth(newInstance.getGradingMonth());
             //插入系统级参数
             List<GradingContent> systemContent = iGradingContentService.createContent(newInstance.getId(), gradingTemplateMetas);
             Map<Long, String> metaMap = gradingTemplateMetas.stream().collect(Collectors.toMap(GradingTemplateMeta::getId, GradingTemplateMeta::getCode));
