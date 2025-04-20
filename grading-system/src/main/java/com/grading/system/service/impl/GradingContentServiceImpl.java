@@ -5,17 +5,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.grading.system.domain.GradingContent;
+import com.grading.system.domain.GradingContentDetail;
 import com.grading.system.domain.GradingContentRel;
 import com.grading.system.domain.GradingTemplateMeta;
 import com.grading.system.mapper.GradingContentMapper;
 import com.grading.system.model.bo.GradingContentMeta;
+import com.grading.system.service.IGradingContentDetailService;
 import com.grading.system.service.IGradingContentRelService;
 import com.grading.system.service.IGradingContentService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -30,6 +34,8 @@ import org.springframework.util.Assert;
 public class GradingContentServiceImpl extends ServiceImpl<GradingContentMapper, GradingContent> implements IGradingContentService {
     @Resource
     private IGradingContentRelService iGradingContentRelService;
+    @Resource
+    private IGradingContentDetailService iGradingContentDetailService;
 
     @Override
     public List<GradingContentMeta> listGradingContentByGradingId(Long gradingId, List<String> titleMetaCodes) {
@@ -88,5 +94,21 @@ public class GradingContentServiceImpl extends ServiceImpl<GradingContentMapper,
 
 
         return systemContent;
+    }
+
+    @Override
+    public void calculateAverageScore(List<Long> contentIds) {
+        if (CollectionUtils.isEmpty(contentIds)){
+            return;
+        }
+        List<GradingContentDetail> gradingContentDetails = iGradingContentDetailService.listByContentIds(contentIds);
+        List<GradingContent> gradingContents = listByIds(contentIds);
+
+        Map<Long, Double> contentScoreMap = gradingContentDetails.stream().collect(Collectors.groupingBy(GradingContentDetail::getContentId, Collectors.averagingDouble(l -> l.getScore().doubleValue())));
+
+        gradingContents.stream().filter(m-> !BooleanUtils.toBoolean(m.getSystemValue()))
+                .forEach(m-> Optional.ofNullable(contentScoreMap.get(m.getId())).ifPresent(s->m.setContent(s.toString())));
+
+        saveOrUpdateBatch(gradingContents);
     }
 }

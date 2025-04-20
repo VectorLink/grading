@@ -1,24 +1,19 @@
 package com.grading.system.model.param;
 
 import java.io.Serializable;
-import java.time.YearMonth;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.grading.common.constant.Constants;
+import java.util.List;
+import com.grading.system.model.bo.GradingScore;
 import lombok.Data;
 
+/**
+ * 用户考核
+ */
 @Data
 public class GradingUserParam implements Serializable {
     /**
-     * 年份-月份
+     * 考核表Id
      */
-    @JsonFormat(pattern = Constants.GRADING_MONTH_PATTERN)
-    private YearMonth yearMonth;
-    /**
-     * 用户名
-     */
-    private Long userId;
-    /**
-     * 考核类型
-     */
-    private Integer type;
+    private Long gradingId;
+
+    private List<GradingScore> scores;
 }

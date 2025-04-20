@@ -16,6 +16,10 @@ public class UserGradingResp implements Serializable {
      */
     private Long userId;
     /**
+     * 考核表Id
+     */
+    private Long gradingId;
+    /**
      * 考核名称
      */
     private String gradingName;

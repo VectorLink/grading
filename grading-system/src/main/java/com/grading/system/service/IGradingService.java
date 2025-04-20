@@ -3,6 +3,7 @@ package com.grading.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.grading.system.domain.Grading;
 import com.grading.system.model.param.GradingUserParam;
+import com.grading.system.model.param.GradingUserQueryParam;
 import com.grading.system.model.resp.UserGradingResp;
 /**
  * 考核Service接口
@@ -17,5 +18,12 @@ public interface IGradingService extends IService<Grading>
      * @param param 查询参数
      * @return
      */
-    UserGradingResp getUserGrading(GradingUserParam param);
+    UserGradingResp getUserGrading(GradingUserQueryParam param);
+
+    /**
+     * 给考核单评分
+     * @param param
+     * @return
+     */
+    void grading(GradingUserParam param);
 }

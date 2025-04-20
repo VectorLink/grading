@@ -28,4 +28,10 @@ public interface IGradingContentService extends IService<GradingContent> {
      * @param gradingTemplateMetas
      */
     List<GradingContent> createContent(Long gradingId, List<GradingTemplateMeta> gradingTemplateMetas);
+
+    /**
+     * 计算内容的评价分
+     * @param contentIds
+     */
+    void calculateAverageScore(List<Long> contentIds);
 }
