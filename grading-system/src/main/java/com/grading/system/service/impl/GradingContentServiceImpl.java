@@ -65,6 +65,7 @@ public class GradingContentServiceImpl extends ServiceImpl<GradingContentMapper,
                             .systemValue(0)
                             .content(StringUtils.EMPTY)
                             .rowId(rowEntryMap.getKey())
+                            .templateMetaId(gradingTemplateMeta.getId())
                             .build());
 
                 }
