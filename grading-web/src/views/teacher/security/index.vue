@@ -1,90 +1,19 @@
 <template>
-  <div class="evaluation-container">
-    <h2 class="main-title">重庆市大足区龙岗幼儿园保安人员工作考核评细</h2>
-
-    <el-card class="evaluation-form">
-      <el-table :data="evaluationItems" border style="width: 100%">
-        <el-table-column prop="content" label="内容" width="110">
-          <template slot-scope="scope">
-            <div>
-              <strong>{{ scope.row.title }}</strong>
-              <div v-if="scope.row.points">（{{ scope.row.points }}）</div>
-            </div>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="standards" label="评分标准" width="580">
-          <template slot-scope="scope">
-            <div class="standards-cell">{{ scope.row.standards }}</div>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="园长评价" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.principalScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="部门评价" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.departmentScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="班组评价" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.classScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="教职工互评" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.staffScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="家长评价" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.parentScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="自评" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.selfScore" type="number" :min="0" :max="scope.row.points"></el-input>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="加分" width="80">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.bonusScore" type="number" :min="0"></el-input>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <div class="explanation-section">
-        <div class="explanation-label">说明：</div>
-        <el-input
-          type="textarea"
-          v-model="explanation"
-          :rows="4"
-          placeholder="请在此处添加说明"
-        ></el-input>
-      </div>
-
-      <div class="total-score-section">
-        <span class="total-label">总分：</span>
-        <span class="total-value">{{ totalScore }}</span>
-      </div>
-    </el-card>
+  <div>
+    <UserRoleTable :roles="userRoles"></UserRoleTable>
   </div>
 </template>
 
 <script>
+
+
+import UserRoleTable from "@/components/UserRoleTable";
 export default {
   name: 'SecurityGuard',
+  components: {UserRoleTable},
   data() {
     return {
+      userRoles:["security"],
       explanation: '',
       evaluationItems: [
         {

@@ -1,72 +1,18 @@
 <template>
-  <div class="evaluation-container">
-    <h1 class="table-title">重庆市大足区龙岗幼儿园保育教师月绩效考核细则</h1>
-
-    <el-table
-      :data="tableData"
-      border
-      class="evaluation-table"
-      :span-method="objectSpanMethod">
-      <el-table-column
-        prop="project"
-        label="项目"
-        width="60">
-      </el-table-column>
-      <el-table-column
-        prop="criteria"
-        label="评分标准"
-        width="550">
-      </el-table-column>
-      <el-table-column
-        prop="principal"
-        label="园长评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="department"
-        label="部门评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="group"
-        label="班组评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="teacher"
-        label="教师互评"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="parent"
-        label="家长评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="self"
-        label="自评"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="score"
-        label="加分"
-        width="70">
-      </el-table-column>
-    </el-table>
-
-    <div class="notes-section">
-      <p class="note-text">
-        说明：园级管理干部、各园区教育园长、每周值班教导对保育老师的工作进行随机督查，根据情况作等第性记录。每月月底班级两位老师对保育老师的表长工作及配班情况进行量化评分，由年导委员会公示考核情况。</p>
-    </div>
+  <div>
+    <UserRoleTable :roles="userRoles"></UserRoleTable>
   </div>
 </template>
 
 <script>
+import UserRoleTable from "@/components/UserRoleTable";
 export default {
   name: 'ChildcareTeacher',
+  components: {UserRoleTable},
   data() {
     return {
       // First page of the table
+      userRoles:["childteacher"],
       tableData: [
         {
           project: '师德师风（30分）',

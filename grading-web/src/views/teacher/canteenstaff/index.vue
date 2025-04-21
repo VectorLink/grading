@@ -1,72 +1,17 @@
 <template>
-  <div class="evaluation-container">
-    <h1 class="table-title">重庆市大足区龙岗幼儿园食堂人员月绩效考核细则</h1>
-
-    <el-table
-      :data="tableData"
-      border
-      class="evaluation-table"
-      :span-method="objectSpanMethod"
-      :cell-style="cellStyle">
-      <el-table-column
-        prop="project"
-        label="项目"
-        width="80">
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="内容"
-        width="80">
-      </el-table-column>
-      <el-table-column
-        prop="criteria"
-        label="评分标准"
-        width="550">
-      </el-table-column>
-      <el-table-column
-        prop="principal"
-        label="园长评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="department"
-        label="部门评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="group"
-        label="班组评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="teacher"
-        label="教职工互评"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="parent"
-        label="家长评价"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="self"
-        label="自评"
-        width="70">
-      </el-table-column>
-      <el-table-column
-        prop="score"
-        label="加分"
-        width="70">
-      </el-table-column>
-    </el-table>
+  <div>
+    <UserRoleTable :roles="userRoles"></UserRoleTable>
   </div>
 </template>
 
 <script>
+import UserRoleTable from "@/components/UserRoleTable";
 export default {
   name: 'CanteenStaff',
+  components: {UserRoleTable},
   data() {
     return {
+      userRoles:["canteen"],
       tableData: [
         // 师德师风
         {

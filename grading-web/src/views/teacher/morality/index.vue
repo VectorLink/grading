@@ -1,100 +1,18 @@
 // HTML Template
 <template>
-  <div class="evaluation-container">
-    <h2 class="main-title">重庆市大足区龙岗幼儿园学年度师德师风考核评价表</h2>
-
-    <el-card class="evaluation-form">
-      <el-form :model="formData" label-position="top">
-        <el-form-item label="被考核人：">
-          <el-input v-model="formData.teacherName"></el-input>
-        </el-form-item>
-
-        <el-table :data="evaluationItems" border style="width: 100%">
-          <el-table-column label="考核项目及(权重)分值" width="150">
-            <template slot-scope="scope">
-              <div>
-                <strong>{{ scope.row.title }}</strong>
-                <div>（{{ scope.row.points }}分）</div>
-              </div>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="考核内容" width="580">
-            <template slot-scope="scope">
-              <div class="content-cell">{{ scope.row.content }}</div>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="园长评价" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.principalScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="部门评价" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.departmentScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="班组互评" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.classScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="职工互评" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.staffScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="家长评价" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.parentScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="自评" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.selfScore" type="number" min="0" :max="scope.row.points"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="加分" width="80">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.bonusScore" type="number" min="0"></el-input>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-row :gutter="20" class="total-row">
-          <el-col :span="8">
-            <el-form-item label="合计得分：">
-              <el-input v-model="totalScore" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="评定等次：">
-              <el-input v-model="formData.evaluationLevel"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="被考核人签字：">
-              <el-input v-model="formData.signature"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
+  <div>
+   <UserRoleTable :roles="userRoles"></UserRoleTable>
   </div>
 </template>
 
 <script>
+import UserRoleTable from "@/components/UserRoleTable";
 export default {
   name: 'Morality',
+  components: {UserRoleTable},
   data() {
     return {
+      userRoles:["childteacher","teacher"],
       formData: {
         teacherName: '',
         evaluationLevel: '',

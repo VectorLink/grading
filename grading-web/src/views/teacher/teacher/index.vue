@@ -1,32 +1,24 @@
 <template>
   <div>
-    <el-button type="primary" @click="fetchData">加载评分数据</el-button>
-
-    <el-table
-      v-if="tableData.length"
-      :data="tableData"
-      border
-      style="margin-top: 20px"
-      :span-method="mergeMethod"
-    >
-      <el-table-column
-        v-for="(title, index) in sortedTitles"
-        :key="index"
-        :label="title.titleName"
-        :prop="title.titleCode"
-      />
-    </el-table>
+    <UserRoleTable :roles="userRoles" @grading="handleUserGrading"></UserRoleTable>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+
 import { grading, getUserGrading} from '@/api/teacher/grading'
+
+// 导入列表查询组件
+
+import UserRoleTable from "@/components/UserRoleTable";
 
 export default {
   name: 'MergedTable',
+  components: {UserRoleTable},
   data() {
     return {
+      userRoles:["teacher"],
+      gradingType:0,
       rawTitles: [],
       sortedTitles: [],
       rawContents: [],
@@ -137,6 +129,17 @@ export default {
       }
 
       return {rowspan: 1, colspan: 1}
+    },
+    handleUserGrading(row) {
+      // 跳转到评价组件或者打开评价对话框
+      this.$router.push({
+        name: 'gradingTable',
+        query: {
+          userId: row.userId,
+          nickName:row.nickName,
+          gradingType: this.gradingType // 使用父组件data中的gradingType
+        }
+      })
     }
   }
 }
