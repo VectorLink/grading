@@ -216,5 +216,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			#{userId}
         </foreach> 
  	</delete>
-	
-</mapper> 
+
+	<select id="listUserByRole" resultType="com.grading.system.model.resp.UserModelResp">
+		select su.user_id                         as userId,
+			   su.user_name                       as 'userName',
+			   su.nick_name                       as nickName,
+			   su.email,
+			   su.phonenumber                     as phoneNumber,
+			   su.sex,
+			   su.status,
+			   group_concat(distinct sr.role_key) as roles
+		from sys_user su
+				 left join sys_user_role sur on su.user_id = sur.user_id
+				 left join sys_role sr on sur.role_id = sr.role_id
+		<where>
+			<if test="roles != null and roles.size() != 0">
+				and sr.role_key in
+				<foreach collection="roles" open="(" close=")" item="role" separator=",">
+					#{role}
+				</foreach>
+			</if>
+			<if test="userName != null and userName != ''">
+				and su.nick_name like concat(#{userName},'%')</if>
+			<if test="telephone != null and telephone != ''">
+				and su.phonenumber = #{telephone}</if>
+		</where>
+		group by su.user_id
+	</select>
+</mapper>

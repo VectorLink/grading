@@ -1,7 +1,10 @@
 package com.grading.system.service;
 
 import java.util.List;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.grading.common.core.domain.entity.SysUser;
+import com.grading.system.model.param.UserRoleParam;
+import com.grading.system.model.resp.UserModelResp;
 
 /**
  * 用户 业务层
@@ -203,4 +206,12 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 查询用户信息
+     * @param param 查询参数
+     * @return
+     */
+    List<UserModelResp> listUserByRole(UserRoleParam param);
+
 }

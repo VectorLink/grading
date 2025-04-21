@@ -27,6 +27,8 @@ import com.grading.common.enums.BusinessType;
 import com.grading.common.utils.SecurityUtils;
 import com.grading.common.utils.StringUtils;
 import com.grading.common.utils.poi.ExcelUtil;
+import com.grading.system.model.param.UserRoleParam;
+import com.grading.system.model.resp.UserModelResp;
 import com.grading.system.service.ISysDeptService;
 import com.grading.system.service.ISysPostService;
 import com.grading.system.service.ISysRoleService;
@@ -252,5 +254,11 @@ public class SysUserController extends BaseController
     public AjaxResult deptTree(SysDept dept)
     {
         return success(deptService.selectDeptTreeList(dept));
+    }
+
+    @GetMapping("/listUserByRoles")
+    public TableDataInfo listUserByRoles(UserRoleParam userRoleParam) {
+        startPage();
+        return getDataTable(userService.listUserByRole(userRoleParam));
     }
 }

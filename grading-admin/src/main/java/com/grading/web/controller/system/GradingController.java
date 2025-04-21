@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
  * @date 2025-04-18
  */
 @RestController
-@RequestMapping("/teacher/grading")
+@RequestMapping("/teacher")
 public class GradingController extends BaseController {
     @Resource
     private IGradingService gradingService;

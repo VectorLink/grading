@@ -1,7 +1,5 @@
 <template>
   <div>
-    <el-button type="primary" @click="fetchData">加载评分数据</el-button>
-
     <el-table
       v-if="tableData.length"
       :data="tableData"
@@ -21,7 +19,6 @@
 
 <script>
 import axios from 'axios'
-import { grading, getUserGrading} from '@/api/teacher/grading'
 
 export default {
   name: 'MergedTable',
@@ -42,7 +39,7 @@ export default {
           templateId: 'your-template-id' // 替换成实际参数
         })
 
-        const {titles, contents} = response.data.data
+        const { titles, contents } = response.data.data
 
         this.rawTitles = titles
         this.rawContents = contents
@@ -92,14 +89,14 @@ export default {
       }
     },
 
-    mergeMethod({row, column, rowIndex, columnIndex}) {
+    mergeMethod({ row, column, rowIndex, columnIndex }) {
       const colCode = this.sortedTitles[columnIndex].titleCode
 
       // mergeRow
       if (this.mergeRowMap[colCode]) {
         const rowspan = this.mergeRowMap[colCode][rowIndex]
-        if (rowspan > 0) return {rowspan, colspan: 1}
-        else return {rowspan: 0, colspan: 0}
+        if (rowspan > 0) return { rowspan, colspan: 1 }
+        else return { rowspan: 0, colspan: 0 }
       }
 
       // mergeColumn
@@ -127,16 +124,16 @@ export default {
             this.mergeColumnCodes.includes(prevCode) &&
             row[prevCode] === currentVal
           ) {
-            return {rowspan: 1, colspan: 0}
+            return { rowspan: 1, colspan: 0 }
           } else {
             break
           }
         }
 
-        return {rowspan: 1, colspan}
+        return { rowspan: 1, colspan }
       }
 
-      return {rowspan: 1, colspan: 1}
+      return { rowspan: 1, colspan: 1 }
     }
   }
 }

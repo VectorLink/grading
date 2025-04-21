@@ -3,6 +3,8 @@ package com.grading.system.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.grading.common.core.domain.entity.SysUser;
+import com.grading.system.model.param.UserRoleParam;
+import com.grading.system.model.resp.UserModelResp;
 
 /**
  * 用户表 数据层
@@ -124,4 +126,6 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    List<UserModelResp> listUserByRole(UserRoleParam param);
 }

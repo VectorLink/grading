@@ -27,6 +27,8 @@ import com.grading.system.mapper.SysRoleMapper;
 import com.grading.system.mapper.SysUserMapper;
 import com.grading.system.mapper.SysUserPostMapper;
 import com.grading.system.mapper.SysUserRoleMapper;
+import com.grading.system.model.param.UserRoleParam;
+import com.grading.system.model.resp.UserModelResp;
 import com.grading.system.service.ISysConfigService;
 import com.grading.system.service.ISysDeptService;
 import com.grading.system.service.ISysUserService;
@@ -546,5 +548,10 @@ public class SysUserServiceImpl implements ISysUserService
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    @Override
+    public List<UserModelResp> listUserByRole(UserRoleParam param) {
+        return userMapper.listUserByRole(param);
     }
 }
