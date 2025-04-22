@@ -23,7 +23,7 @@
         </el-date-picker>
       </div>
       <div class="examiner-info">
-        <el-button type="danger" :disabled="gradingStatus !== 1">考核</el-button>
+        <el-button type="danger" :disabled="gradingStatus !== 1" @click="openGradingDialog">考核</el-button>
       </div>
     </div>
 
@@ -49,6 +49,40 @@
         <p>暂无考核数据</p>
       </div>
     </div>
+
+    <!-- 考核对话框 -->
+    <el-dialog
+      title="考核评分"
+      :visible.sync="gradingDialogVisible"
+      width="700px"
+      :close-on-click-modal="false">
+      <div class="grading-dialog-content">
+        <el-table
+          :data="gradingScores"
+          border
+          :span-method="gradingTableSpanMethod"
+          class="grading-scores-table">
+          <el-table-column prop="gradingName" label="评价项" align="center"></el-table-column>
+          <el-table-column prop="userName" label="评价人" align="center"></el-table-column>
+          <el-table-column prop="title" label="评价内容" align="center"></el-table-column>
+          <el-table-column label="分值" align="center" width="120">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.score"
+                :min="0"
+                :max="100"
+                size="small"
+                controls-position="right">
+              </el-input-number>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="gradingDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitGrading">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -77,7 +111,12 @@ export default {
       nickName: "",
       gradingName: "",
       gradingStatus: null,
-      gradingStatusName: ''
+      gradingStatusName: '',
+      scores: [],
+      gradingDialogVisible: false,
+      gradingScores: [],
+      gradingRowMergeMap: {},
+      gradingId: null
     }
   },
   methods: {
@@ -98,6 +137,8 @@ export default {
             this.gradingName = response.data.gradingName
             this.gradingStatus = response.data.gradingStatus
             this.gradingStatusName = response.data.gradingStatusName
+            this.scores = response.data.scores
+            this.gradingId = response.data.gradingId
             // 按 sort 排序表头
             this.sortedTitles = [...titles].sort((a, b) => a.sort - b.sort)
 
@@ -216,6 +257,130 @@ export default {
         fontSize: '14px',
         padding: '8px 4px'
       }
+    },
+
+    // 打开考核对话框
+    openGradingDialog() {
+      this.gradingScores = JSON.parse(JSON.stringify(this.scores || []))
+
+      // 处理考核表格合并单元格
+      this.processGradingTableMerge()
+
+      this.gradingDialogVisible = true
+    },
+
+    // 处理考核表格合并单元格
+    processGradingTableMerge() {
+      const titleMap = {}
+      const userMap = {}
+
+      // 初始化合并信息
+      this.gradingRowMergeMap = {
+        gradingName: {},
+        userName: {}
+      }
+
+      // 构建合并信息
+      this.gradingScores.forEach((item, index) => {
+        // 处理 title 列合并
+        if (!titleMap[item.gradingName]) {
+          titleMap[item.gradingName] = { startIndex: index, count: 1 }
+        } else {
+          titleMap[item.gradingName].count++
+        }
+
+        // 处理 userName 列合并
+        const userKey = `${item.gradingName}_${item.userName}`
+        if (!userMap[userKey]) {
+          userMap[userKey] = { startIndex: index, count: 1 }
+        } else {
+          userMap[userKey].count++
+        }
+      })
+
+      // 设置 title 列的合并信息
+      Object.values(titleMap).forEach(info => {
+        if (info.count > 1) {
+          this.gradingRowMergeMap.gradingName[info.startIndex] = info.count
+          for (let i = 1; i < info.count; i++) {
+            this.gradingRowMergeMap.gradingName[info.startIndex + i] = 0
+          }
+        } else {
+          this.gradingRowMergeMap.gradingName[info.startIndex] = 1
+        }
+      })
+
+      // 设置 userName 列的合并信息
+      Object.values(userMap).forEach(info => {
+        if (info.count > 1) {
+          this.gradingRowMergeMap.userName[info.startIndex] = info.count
+          for (let i = 1; i < info.count; i++) {
+            this.gradingRowMergeMap.userName[info.startIndex + i] = 0
+          }
+        } else {
+          this.gradingRowMergeMap.userName[info.startIndex] = 1
+        }
+      })
+    },
+
+    // 考核表格合并单元格方法
+    gradingTableSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) { // 评价项列
+        const rowspan = this.gradingRowMergeMap.gradingName[rowIndex]
+        if (rowspan !== undefined) {
+          return {
+            rowspan: rowspan,
+            colspan: rowspan === 0 ? 0 : 1
+          }
+        }
+        return { rowspan: 1, colspan: 1 }
+      } else if (columnIndex === 1) { // 评价人列
+        const rowspan = this.gradingRowMergeMap.userName[rowIndex]
+        if (rowspan !== undefined) {
+          return {
+            rowspan: rowspan,
+            colspan: rowspan === 0 ? 0 : 1
+          }
+        }
+        return { rowspan: 1, colspan: 1 }
+      }
+      return { rowspan: 1, colspan: 1 }
+    },
+
+    // 提交考核
+    submitGrading() {
+      const submitData = {
+        gradingId: this.gradingId,
+        scores: this.gradingScores.map(item => ({
+          contentDetailId: item.contentId,
+          score: item.score
+        }))
+      }
+
+      this.$confirm('确认提交考核评分？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$loading({
+          lock: true,
+          text: '提交考核数据中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(255, 255, 255, 0.7)'
+        })
+
+        grading(submitData).then(response => {
+          this.$loading().close()
+          this.$message.success('考核评分提交成功')
+          this.gradingDialogVisible = false
+          this.fetchData() // 重新加载数据
+        }).catch(() => {
+          this.$loading().close()
+          this.$message.error('考核评分提交失败')
+        })
+      }).catch(() => {
+        // 取消提交
+      })
     }
   },
 
@@ -293,5 +458,15 @@ export default {
 .no-data i {
   font-size: 48px;
   margin-bottom: 10px;
+}
+
+/* 评分对话框样式 */
+.grading-dialog-content {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.grading-scores-table {
+  width: 100%;
 }
 </style>

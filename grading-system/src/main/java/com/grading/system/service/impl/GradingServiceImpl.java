@@ -153,13 +153,18 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
 
         }
 
+        Long queryUserId = SecurityUtils.isAdmin(loginUser.getUserId()) ? null : loginUser.getUserId();
+
+        userGradingResp.setScores(iGradingContentDetailService.listUserGradingUser(userGradingResp.getGradingId(), queryUserId));
+
         return userGradingResp;
     }
 
     /**
      * 获取用户可以接触到的数据
-     * @param userId 考核对象Id
-     * @param loginUser 登录人
+     *
+     * @param userId               考核对象Id
+     * @param loginUser            登录人
      * @param gradingTemplateMetas 数据模版
      * @return
      */
@@ -192,41 +197,44 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void grading(GradingUserParam param) {
-        Assert.notNull(param.getGradingId(),"考核单Id不能为空！");
+        Assert.notNull(param.getGradingId(), "考核单Id不能为空！");
         Grading grading = getById(param.getGradingId());
-        Assert.notNull(grading,"考核单不存在！");
-        Assert.isTrue(grading.getStatus().equals(1),"考核单不在考核中！");
-        Assert.notEmpty(param.getScores(),"考核分数不能为空！");
+        Assert.notNull(grading, "考核单不存在！");
+        Assert.isTrue(grading.getStatus().equals(1), "考核单不在考核中！");
+        Assert.notEmpty(param.getScores(), "考核分数不能为空！");
         //登录人信息
         LoginUser loginUser = SecurityUtils.getLoginUser();
 
         //过滤出操作人可以操作的评分数据
-        log.info("用户：{}开始对考核表：{}，考核日期：{}进行评分，参数：{}",loginUser.getUsername(),grading.getGradingName(),grading.getGradingMonth(), JSON.toJSONString(param));
+        log.info("用户：{}开始对考核表：{}，考核日期：{}进行评分，参数：{}", loginUser.getUsername(), grading.getGradingName(), grading.getGradingMonth(), JSON.toJSONString(param));
 
         List<GradingTemplateMeta> gradingTemplateMetas = iGradingTemplateMetaService.listGradingTypeTitle(grading.getGradingType());
         //获取用户可以处理的执行表格
         Set<Long> userTitleMeta = getUserTitleMeta(grading.getUserId(), loginUser, gradingTemplateMetas).stream().map(GradingTemplateMeta::getId).collect(Collectors.toSet());
 
-        List<Long> contentIds = param.getScores().stream().map(GradingScore::getContentId).map(Long::valueOf).collect(Collectors.toList());
+        List<Long> contentDetailIds = param.getScores().stream().map(GradingScore::getContentDetailId).map(Long::valueOf).collect(Collectors.toList());
 
+
+        List<GradingContentDetail> gradingContentDetails = iGradingContentDetailService.listByIds(contentDetailIds);
+
+        List<Long> contentIds = gradingContentDetails.stream().map(GradingContentDetail::getContentId).collect(Collectors.toList());
         List<GradingContent> gradingContents = iGradingContentService.listByIds(contentIds);
 
         Set<Long> templateMetaId = gradingContents.stream().map(GradingContent::getTemplateMetaId).collect(Collectors.toSet());
 
         //验证一下操作权限
-        if (templateMetaId.stream().filter(l->!userTitleMeta.contains(l)).findAny().isPresent()) {
+        if (templateMetaId.stream().filter(l -> !userTitleMeta.contains(l)).findAny().isPresent()) {
             throw new RuntimeException("用户操作无权限操作！");
         }
 
         //开始评分
         //分数MAP
-        Map<Long, BigDecimal> contentScoreMap = param.getScores().stream().collect(Collectors.toMap(l->Long.valueOf(l.getContentId()), GradingScore::getScore));
+        Map<Long, BigDecimal> contentScoreMap = param.getScores().stream().collect(Collectors.toMap(l -> Long.valueOf(l.getContentDetailId()), GradingScore::getScore));
         //判断是否已经评分过
-        List<GradingContentDetail> gradingContentDetails = iGradingContentDetailService.listGradingContentDetail(loginUser.getUserId(), contentIds);
         //修改分数
-        if (CollectionUtils.isNotEmpty(gradingContentDetails)){
+        if (CollectionUtils.isNotEmpty(gradingContentDetails)) {
             for (GradingContentDetail gradingContentDetail : gradingContentDetails) {
-                Optional.ofNullable(contentScoreMap.get(gradingContentDetail.getContentId()))
+                Optional.ofNullable(contentScoreMap.get(gradingContentDetail.getId()))
                         .ifPresent(gradingContentDetail::setScore);
                 gradingContentDetail.setUpdateTime(LocalDateTime.now());
             }
@@ -244,7 +252,7 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
                     ));
         }
 
-       //保存评分数据
+        //保存评分数据
         iGradingContentDetailService.saveOrUpdateBatch(gradingContentDetails);
 
         //再次计算平均分

@@ -3,6 +3,7 @@ package com.grading.system.service;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.grading.system.domain.GradingContentDetail;
+import com.grading.system.model.bo.GradingUserScore;
 
 /**
  * 考核内容值Service接口
@@ -25,4 +26,12 @@ public interface IGradingContentDetailService extends IService<GradingContentDet
      * @return
      */
     List<GradingContentDetail> listByContentIds(List<Long> contentIds);
+
+    /**
+     * 获取考核表的具体评分信息
+     * @param gradingId 考核表
+     * @param userId 用户ID
+     * @return
+     */
+    List<GradingUserScore> listUserGradingUser(Long gradingId,Long userId);
 }

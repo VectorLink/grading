@@ -3,4 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.grading.system.mapper.GradingContentDetailMapper">
+    <select id="listUserGradingUser" resultType="com.grading.system.model.bo.GradingUserScore">
+        select m.name as gradingName, su.nick_name as userName, c.content as title, gcd.id as contentId, gcd.score
+        from grading_content_detail gcd
+                 join sys_user su on su.user_id = gcd.grading_user_id
+                 join grading_content gc on gc.id = gcd.content_id
+                 join grading_content_rel gcr on gcr.content_id = gc.id
+                 join grading g on g.id = gcr.grading_id = g.id
+                 join grading_content c on gc.row_id = c.row_id
+                 join grading_template_meta gtm on gtm.id = c.template_meta_id and sort = 0
+                 join grading_template_meta m on gc.template_meta_id = m.id
+        where g.id = #{gradingId}
+          and gc.system_value = 0
+        <if test="userId != null">
+            and gcd.grading_user_id = #{userId}</if>
+        order by gc.row_id asc
+    </select>
 </mapper>

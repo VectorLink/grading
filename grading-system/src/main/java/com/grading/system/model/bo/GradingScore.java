@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class GradingScore implements Serializable {
     /**
-     * Id
+     * 内容详情Id
      */
-    private String contentId;
+    private String contentDetailId;
     /**
      * 分数
      */

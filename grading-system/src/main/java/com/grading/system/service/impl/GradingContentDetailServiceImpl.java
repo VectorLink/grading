@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.grading.system.domain.GradingContentDetail;
 import com.grading.system.mapper.GradingContentDetailMapper;
+import com.grading.system.model.bo.GradingUserScore;
 import com.grading.system.service.IGradingContentDetailService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -34,5 +35,11 @@ public class GradingContentDetailServiceImpl extends ServiceImpl<GradingContentD
             return Collections.emptyList();
         }
         return lambdaQuery().in(GradingContentDetail::getContentId,contentIds).list();
+    }
+
+    @Override
+    public List<GradingUserScore> listUserGradingUser(Long gradingId, Long userId) {
+        Assert.notNull(gradingId,"考核表ID不能为空");
+        return baseMapper.listUserGradingUser(gradingId,userId);
     }
 }

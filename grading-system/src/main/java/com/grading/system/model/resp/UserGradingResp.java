@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import com.grading.system.model.bo.GradingContentMeta;
 import com.grading.system.model.bo.GradingTitleMeta;
+import com.grading.system.model.bo.GradingUserScore;
 import lombok.Data;
 
 /**
@@ -43,4 +44,8 @@ public class UserGradingResp implements Serializable {
      * 内容
      */
     private List<GradingContentMeta> contents;
+    /**
+     * 具体评分人分值
+     */
+    private List<GradingUserScore> scores;
 }
