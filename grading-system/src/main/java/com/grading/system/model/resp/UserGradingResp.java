@@ -28,6 +28,14 @@ public class UserGradingResp implements Serializable {
      */
     private String gradingMonth;
     /**
+     * 考核状态Id
+     */
+    private Integer gradingStatus;
+    /**
+     * 考核状态
+     */
+    private String gradingStatusName;
+    /**
      * 标题
      */
     private List<GradingTitleMeta> titles;

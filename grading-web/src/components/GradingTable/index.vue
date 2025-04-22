@@ -7,7 +7,10 @@
         <span class="label">考核人：</span>
         <span class="value">{{ this.nickName }}</span>
       </div>
-
+      <div class="examiner-info">
+        <span class="label">考核状态：</span>
+        <span class="value">{{ this.gradingStatusName }}</span>
+      </div>
       <div class="month-selector">
         <span class="label">考核月份：</span>
         <el-date-picker
@@ -16,8 +19,11 @@
           value-format="yyyyMM"
           placeholder="选择月份"
           class="date-picker"
-          @change="printValue">
+          @change="fetchData">
         </el-date-picker>
+      </div>
+      <div class="examiner-info">
+        <el-button type="danger" :disabled="gradingStatus !== 1">考核</el-button>
       </div>
     </div>
 
@@ -69,15 +75,12 @@ export default {
       mergeRowMap: {},
       mergeColumnCodes: [],
       nickName: "",
-      gradingName: ""
+      gradingName: "",
+      gradingStatus: null,
+      gradingStatusName: ''
     }
   },
   methods: {
-    printValue() {
-      console.log(JSON.stringify(this.queryUserQueryParam))
-      console.log(this.nickName)
-    },
-
     async fetchData() {
       try {
         this.$loading({
@@ -93,7 +96,8 @@ export default {
             this.rawTitles = titles
             this.rawContents = contents
             this.gradingName = response.data.gradingName
-
+            this.gradingStatus = response.data.gradingStatus
+            this.gradingStatusName = response.data.gradingStatusName
             // 按 sort 排序表头
             this.sortedTitles = [...titles].sort((a, b) => a.sort - b.sort)
 

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import com.alibaba.fastjson2.JSON;
@@ -17,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.grading.common.constant.Constants;
 import com.grading.common.core.domain.entity.SysUser;
 import com.grading.common.core.domain.model.LoginUser;
+import com.grading.common.enums.GradingStatusEnum;
 import com.grading.common.enums.GradingTypeEnum;
 import com.grading.common.enums.RoleTypeEnum;
 import com.grading.common.utils.SecurityUtils;
@@ -92,6 +92,8 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
             userGradingResp.setGradingId(grading.getId());
             userGradingResp.setGradingName(grading.getGradingName());
             userGradingResp.setGradingMonth(grading.getGradingMonth());
+            userGradingResp.setGradingStatus(grading.getStatus());
+            userGradingResp.setGradingStatusName(GradingStatusEnum.fromData(grading.getStatus()).getDisplayName());
             //获取考核内容
             userGradingResp.setContents(iGradingContentService.listGradingContentByGradingId(grading.getId(), titleMetaCodes));
         } else {
@@ -130,6 +132,8 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
             userGradingResp.setGradingName(newInstance.getGradingName());
             userGradingResp.setGradingMonth(newInstance.getGradingMonth());
             userGradingResp.setGradingId(newInstance.getId());
+            userGradingResp.setGradingStatus(newInstance.getStatus());
+            userGradingResp.setGradingStatusName(GradingStatusEnum.fromData(newInstance.getStatus()).getDisplayName());
             //插入系统级参数
             List<GradingContent> systemContent = iGradingContentService.createContent(newInstance.getId(), gradingTemplateMetas);
             Map<Long, String> metaMap = gradingTemplateMetas.stream().collect(Collectors.toMap(GradingTemplateMeta::getId, GradingTemplateMeta::getCode));

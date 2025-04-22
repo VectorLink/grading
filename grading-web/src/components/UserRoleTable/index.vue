@@ -110,7 +110,7 @@
             type="text"
             icon="el-icon-edit"
             @click="grading(scope.row)"
-          >评价
+          >查看考核表
           </el-button>
         </template>
       </el-table-column>
