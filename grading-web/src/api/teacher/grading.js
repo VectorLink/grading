@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import {parseStrEmpty} from "@/utils/ruoyi";
 
 //获取考核表信息
 export function getUserGrading(data) {
@@ -16,5 +17,12 @@ export function grading(data) {
     url: '/teacher/grading',
     data: data,
     method: 'post'
+  })
+}
+//获取考核成绩表
+export function getGradingScore(gradingId){
+  return request({
+    url:'/teacher/getGradingScore/'+parseStrEmpty(gradingId),
+    method: 'get'
   })
 }

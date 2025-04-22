@@ -1,5 +1,6 @@
 package com.grading.system.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -104,11 +105,19 @@ public class GradingContentServiceImpl extends ServiceImpl<GradingContentMapper,
         List<GradingContentDetail> gradingContentDetails = iGradingContentDetailService.listByContentIds(contentIds);
         List<GradingContent> gradingContents = listByIds(contentIds);
 
-        Map<Long, Double> contentScoreMap = gradingContentDetails.stream().collect(Collectors.groupingBy(GradingContentDetail::getContentId, Collectors.averagingDouble(l -> l.getScore().doubleValue())));
+        Map<Long, Double> contentScoreMap = gradingContentDetails.stream()
+                .filter(l->l.getScore().compareTo(BigDecimal.ZERO)>0)
+                .collect(Collectors.groupingBy(GradingContentDetail::getContentId, Collectors.averagingDouble(l -> l.getScore().doubleValue())));
 
         gradingContents.stream().filter(m-> !BooleanUtils.toBoolean(m.getSystemValue()))
                 .forEach(m-> Optional.ofNullable(contentScoreMap.get(m.getId())).ifPresent(s->m.setContent(s.toString())));
 
         saveOrUpdateBatch(gradingContents);
+    }
+
+    @Override
+    public List<Long> listGradingProject(Long gradingId,List<String> metaCodes) {
+        Assert.notNull(gradingId,"考核表ID不能为空");
+        return baseMapper.listGradingProject(gradingId,metaCodes);
     }
 }

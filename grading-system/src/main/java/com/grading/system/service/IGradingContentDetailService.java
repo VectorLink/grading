@@ -34,4 +34,5 @@ public interface IGradingContentDetailService extends IService<GradingContentDet
      * @return
      */
     List<GradingUserScore> listUserGradingUser(Long gradingId,Long userId);
+
 }

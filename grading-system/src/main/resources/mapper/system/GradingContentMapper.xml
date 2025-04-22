@@ -23,4 +23,19 @@
             </foreach>
         </if>
     </select>
+
+    <select id="listGradingProject" resultType="java.lang.Long">
+        select gc.id
+        from grading g
+                 left join grading_content_rel gcr on g.id = gcr.grading_id
+                 left join grading_content gc on gc.id = gcr.content_id
+                 left join grading_template_meta gtm on gc.template_meta_id = gtm.id
+        where g.id = #{gradingId}
+        <if test="metaCodes != null and metaCodes.size() != 0">
+            and gtm.code in
+            <foreach collection="metaCodes" separator="," item="code" close=")" open="(">
+                #{code}
+            </foreach>
+        </if>
+    </select>
 </mapper>

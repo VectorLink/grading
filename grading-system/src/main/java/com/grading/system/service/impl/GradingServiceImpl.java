@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import com.alibaba.fastjson2.JSON;
@@ -28,6 +29,7 @@ import com.grading.system.mapper.GradingMapper;
 import com.grading.system.model.bo.GradingContentMeta;
 import com.grading.system.model.bo.GradingScore;
 import com.grading.system.model.bo.GradingTitleMeta;
+import com.grading.system.model.bo.GradingUserScore;
 import com.grading.system.model.param.GradingUserParam;
 import com.grading.system.model.param.GradingUserQueryParam;
 import com.grading.system.model.resp.UserGradingResp;
@@ -257,5 +259,45 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
 
         //再次计算平均分
         iGradingContentService.calculateAverageScore(contentIds);
+    }
+
+    @Override
+    public List<GradingUserScore> listUserGradingScores(Long gradingId) {
+        Assert.notNull(gradingId,"考核单ID不能为空");
+        Grading grading = getById(gradingId);
+        Assert.notNull(grading,"考核单不存在!");
+
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+
+        List<GradingTemplateMeta> gradingTemplateMetas = iGradingTemplateMetaService.listGradingTypeTitle(grading.getGradingType());
+
+        List<GradingTemplateMeta> userTitleMeta = getUserTitleMeta(grading.getUserId(), loginUser, gradingTemplateMetas);
+
+        List<Long> contentIds = iGradingContentService.listGradingProject(gradingId, userTitleMeta.stream().map(GradingTemplateMeta::getCode).collect(Collectors.toList()));
+
+        List<GradingContentDetail> contentDetails = iGradingContentDetailService.listGradingContentDetail(loginUser.getUserId(), contentIds);
+
+        Map<Long, GradingContentDetail> contentDetailMap = contentDetails.stream().collect(Collectors.toMap(GradingContentDetail::getContentId, Function.identity()));
+
+        Boolean saveFlag=false;
+        for (Long contentId : contentIds) {
+            //新增详情进去
+            if (!contentDetailMap.containsKey(contentId)){
+                contentDetails.add( GradingContentDetail.builder()
+                        .gradingUserId(loginUser.getUserId())
+                        .contentId(contentId)
+                        .createTime(LocalDateTime.now())
+                        .updateTime(LocalDateTime.now())
+                        .build());
+                        saveFlag=true;
+            }
+
+        }
+
+        if (saveFlag){
+            iGradingContentDetailService.saveOrUpdateBatch(contentDetails);
+        }
+        Long queryUserId = SecurityUtils.isAdmin(loginUser.getUserId()) ? null : loginUser.getUserId();
+        return iGradingContentDetailService.listUserGradingUser(gradingId,queryUserId);
     }
 }

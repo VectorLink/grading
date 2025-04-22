@@ -34,4 +34,11 @@ public interface IGradingContentService extends IService<GradingContent> {
      * @param contentIds
      */
     void calculateAverageScore(List<Long> contentIds);
+
+    /**
+     * 根据考核表ID获取考核内容ID
+     * @param gradingId 考核表ID
+     * @return
+     */
+    List<Long> listGradingProject(Long gradingId,List<String> metaCodes);
 }

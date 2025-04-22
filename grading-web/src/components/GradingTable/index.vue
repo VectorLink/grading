@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {grading, getUserGrading} from '@/api/teacher/grading'
+import {grading, getUserGrading, getGradingScore} from '@/api/teacher/grading'
 
 export default {
   name: 'GradingTable',
@@ -261,18 +261,37 @@ export default {
 
     // 打开考核对话框
     openGradingDialog() {
-      this.gradingScores = JSON.parse(JSON.stringify(this.scores || []))
+      // 先获取最新的评分数据
+      this.$loading({
+        lock: true,
+        text: '加载评分数据中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(255, 255, 255, 0.7)'
+      })
 
-      // 处理考核表格合并单元格
-      this.processGradingTableMerge()
+      getGradingScore(this.gradingId).then(response => {
+        this.$loading().close()
+        this.gradingScores = JSON.parse(JSON.stringify(response.data || []))
 
-      this.gradingDialogVisible = true
+        // 处理考核表格合并单元格
+        this.processGradingTableMerge()
+
+        this.gradingDialogVisible = true
+      }).catch(() => {
+        this.$loading().close()
+        this.$message.error('加载评分数据失败')
+      })
     },
 
     // 处理考核表格合并单元格
     processGradingTableMerge() {
-      const titleMap = {}
-      const userMap = {}
+      // 先对数据进行排序，确保相同的评价项和评价人在一起
+      this.gradingScores.sort((a, b) => {
+        if (a.gradingName !== b.gradingName) {
+          return a.gradingName.localeCompare(b.gradingName)
+        }
+        return a.userName.localeCompare(b.userName)
+      })
 
       // 初始化合并信息
       this.gradingRowMergeMap = {
@@ -280,45 +299,71 @@ export default {
         userName: {}
       }
 
-      // 构建合并信息
+      // 处理评价项(gradingName)列合并
+      let prevGradingName = null
+      let gradingNameSpan = 1
+      let gradingNameStartIndex = 0
+
+      // 处理评价人(userName)列合并 - 需要在相同评价项下合并
+      let prevUserName = null
+      let userNameSpan = 1
+      let userNameStartIndex = 0
+
       this.gradingScores.forEach((item, index) => {
-        // 处理 title 列合并
-        if (!titleMap[item.gradingName]) {
-          titleMap[item.gradingName] = { startIndex: index, count: 1 }
+        // 处理评价项列合并
+        if (index === 0) {
+          prevGradingName = item.gradingName
+          gradingNameStartIndex = 0
+        } else if (item.gradingName === prevGradingName) {
+          gradingNameSpan++
         } else {
-          titleMap[item.gradingName].count++
-        }
-
-        // 处理 userName 列合并
-        const userKey = `${item.gradingName}_${item.userName}`
-        if (!userMap[userKey]) {
-          userMap[userKey] = { startIndex: index, count: 1 }
-        } else {
-          userMap[userKey].count++
-        }
-      })
-
-      // 设置 title 列的合并信息
-      Object.values(titleMap).forEach(info => {
-        if (info.count > 1) {
-          this.gradingRowMergeMap.gradingName[info.startIndex] = info.count
-          for (let i = 1; i < info.count; i++) {
-            this.gradingRowMergeMap.gradingName[info.startIndex + i] = 0
+          // 设置前一个评价项的合并信息
+          this.gradingRowMergeMap.gradingName[gradingNameStartIndex] = gradingNameSpan
+          for (let i = 1; i < gradingNameSpan; i++) {
+            this.gradingRowMergeMap.gradingName[gradingNameStartIndex + i] = 0
           }
-        } else {
-          this.gradingRowMergeMap.gradingName[info.startIndex] = 1
-        }
-      })
 
-      // 设置 userName 列的合并信息
-      Object.values(userMap).forEach(info => {
-        if (info.count > 1) {
-          this.gradingRowMergeMap.userName[info.startIndex] = info.count
-          for (let i = 1; i < info.count; i++) {
-            this.gradingRowMergeMap.userName[info.startIndex + i] = 0
-          }
+          // 重置计数器
+          prevGradingName = item.gradingName
+          gradingNameStartIndex = index
+          gradingNameSpan = 1
+        }
+
+        // 处理评价人列合并 - 在相同评价项下合并相同评价人
+        const currentKey = `${item.gradingName}_${item.userName}`
+        const prevKey = prevUserName ? `${prevGradingName}_${prevUserName}` : null
+
+        if (index === 0) {
+          prevUserName = item.userName
+          userNameStartIndex = 0
+        } else if (currentKey === prevKey) {
+          userNameSpan++
         } else {
-          this.gradingRowMergeMap.userName[info.startIndex] = 1
+          // 设置前一个评价人的合并信息
+          this.gradingRowMergeMap.userName[userNameStartIndex] = userNameSpan
+          for (let i = 1; i < userNameSpan; i++) {
+            this.gradingRowMergeMap.userName[userNameStartIndex + i] = 0
+          }
+
+          // 重置计数器
+          prevUserName = item.userName
+          userNameStartIndex = index
+          userNameSpan = 1
+        }
+
+        // 处理最后一行的情况
+        if (index === this.gradingScores.length - 1) {
+          // 设置最后一个评价项的合并信息
+          this.gradingRowMergeMap.gradingName[gradingNameStartIndex] = gradingNameSpan
+          for (let i = 1; i < gradingNameSpan; i++) {
+            this.gradingRowMergeMap.gradingName[gradingNameStartIndex + i] = 0
+          }
+
+          // 设置最后一个评价人的合并信息
+          this.gradingRowMergeMap.userName[userNameStartIndex] = userNameSpan
+          for (let i = 1; i < userNameSpan; i++) {
+            this.gradingRowMergeMap.userName[userNameStartIndex + i] = 0
+          }
         }
       })
     },
@@ -333,7 +378,6 @@ export default {
             colspan: rowspan === 0 ? 0 : 1
           }
         }
-        return { rowspan: 1, colspan: 1 }
       } else if (columnIndex === 1) { // 评价人列
         const rowspan = this.gradingRowMergeMap.userName[rowIndex]
         if (rowspan !== undefined) {
@@ -342,7 +386,6 @@ export default {
             colspan: rowspan === 0 ? 0 : 1
           }
         }
-        return { rowspan: 1, colspan: 1 }
       }
       return { rowspan: 1, colspan: 1 }
     },
