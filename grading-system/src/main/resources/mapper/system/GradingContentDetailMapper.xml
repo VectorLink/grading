@@ -6,10 +6,10 @@
     <select id="listUserGradingUser" resultType="com.grading.system.model.bo.GradingUserScore">
         select gtm.name as gradingName, su.nick_name as userName, a.content as title, gcd.id as contentId, gcd.score
         from grading g
-                 left join sys_user su on su.user_id = g.user_id
                  left join grading_content_rel gcr on g.id = gcr.grading_id
                  left join grading_content gc on gc.id = gcr.content_id
                  left join grading_content_detail gcd on gcd.content_id = gc.id
+                 left join sys_user su on su.user_id = gcd.grading_user_id
                  left join grading_template_meta gtm on gtm.id = gc.template_meta_id
                  left join (
             select c.row_id, c.content

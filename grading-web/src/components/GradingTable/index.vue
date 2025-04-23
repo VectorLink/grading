@@ -107,7 +107,7 @@ export default {
       rawContents: [],
       tableData: [],
       mergeRowMap: {},
-      mergeColumnCodes: [],
+      mergeColumnMap: {},
       nickName: "",
       gradingName: "",
       gradingStatus: null,
@@ -139,12 +139,9 @@ export default {
             this.gradingStatusName = response.data.gradingStatusName
             this.scores = response.data.scores
             this.gradingId = response.data.gradingId
+
             // 按 sort 排序表头
             this.sortedTitles = [...titles].sort((a, b) => a.sort - b.sort)
-
-            // 设置 mergeRow 和 mergeColumn 标记
-            this.mergeColumnCodes = this.rawTitles.filter(t => t.mergeColumn).map(t => t.titleCode)
-            const mergeRowCodes = this.rawTitles.filter(t => t.mergeRow).map(t => t.titleCode)
 
             // 整理表格数据（按 rowId 分组）
             const grouped = {}
@@ -153,32 +150,27 @@ export default {
                 grouped[item.rowId] = {}
               }
               grouped[item.rowId][item.titleCode] = item.content
+
+              // 为每行数据添加合并标记和内容ID
+              if (!grouped[item.rowId]._mergeRow) {
+                grouped[item.rowId]._mergeRow = {}
+              }
+              if (!grouped[item.rowId]._mergeColumn) {
+                grouped[item.rowId]._mergeColumn = {}
+              }
+              if (!grouped[item.rowId]._contentId) {
+                grouped[item.rowId]._contentId = {}
+              }
+
+              grouped[item.rowId]._mergeRow[item.titleCode] = item.mergeRow
+              grouped[item.rowId]._mergeColumn[item.titleCode] = item.mergeColumn
+              grouped[item.rowId]._contentId[item.titleCode] = item.contentId
             })
 
             this.tableData = Object.values(grouped)
 
-            // 构建 mergeRowMap
-            this.mergeRowMap = {}
-            mergeRowCodes.forEach(code => {
-              const map = {}
-              let prev = null
-              let span = 1
-
-              this.tableData.forEach((row, i) => {
-                const val = row[code]
-                if (val === prev) {
-                  map[i - span] = (map[i - span] || 1) + 1
-                  map[i] = 0
-                  span++
-                } else {
-                  map[i] = 1
-                  prev = val
-                  span = 1
-                }
-              })
-
-              this.mergeRowMap[code] = map
-            })
+            // 构建合并单元格的映射
+            this.buildMergeMaps(contents)
 
             this.$loading().close()
           }
@@ -193,26 +185,98 @@ export default {
       }
     },
 
-    mergeMethod({row, column, rowIndex, columnIndex}) {
-      const colCode = this.sortedTitles[columnIndex].titleCode
+    // 构建合并单元格的映射
+    buildMergeMaps(contents) {
+      // 重置合并映射
+      this.mergeRowMap = {}
+      this.mergeColumnMap = {}
 
-      // mergeRow
-      if (this.mergeRowMap[colCode]) {
+      // 获取所有需要进行行合并的列
+      const colsNeedRowMerge = [...new Set(contents.filter(item => item.mergeRow).map(item => item.titleCode))]
+
+      // 获取所有需要进行列合并的列
+      const colsNeedColMerge = [...new Set(contents.filter(item => item.mergeColumn).map(item => item.titleCode))]
+
+      // 处理行合并映射
+      colsNeedRowMerge.forEach(colCode => {
+        this.mergeRowMap[colCode] = {}
+
+        // 按列代码筛选内容
+        const colContents = contents.filter(item => item.titleCode === colCode)
+          .sort((a, b) => a.rowId - b.rowId) // 按行ID排序
+
+        let currentValue = null
+        let startIdx = -1
+        let count = 0
+
+        // 遍历每一行
+        colContents.forEach((item, idx) => {
+          const rowIdx = item.rowId - 1 // 转为0基索引
+
+          if (idx === 0) {
+            // 第一行
+            currentValue = item.content
+            startIdx = rowIdx
+            count = 1
+          } else if (item.content === currentValue && rowIdx === startIdx + count) {
+            // 值相同且行连续
+            count++
+          } else {
+            // 值不同或行不连续，记录前面的合并组
+            if (count > 1) {
+              this.mergeRowMap[colCode][startIdx] = count
+              // 设置被合并的行
+              for (let i = 1; i < count; i++) {
+                this.mergeRowMap[colCode][startIdx + i] = 0
+              }
+            }
+
+            // 开始新一组
+            currentValue = item.content
+            startIdx = rowIdx
+            count = 1
+          }
+        })
+
+        // 处理最后一组
+        if (count > 1) {
+          this.mergeRowMap[colCode][startIdx] = count
+          for (let i = 1; i < count; i++) {
+            this.mergeRowMap[colCode][startIdx + i] = 0
+          }
+        }
+      })
+
+      // 处理列合并映射 (如果需要)
+      // 注：列合并通常在 mergeMethod 方法中动态计算
+    },
+
+    // 合并单元格方法
+    mergeMethod({row, column, rowIndex, columnIndex}) {
+      const colCode = column.property // 使用列的property属性，即title.code
+
+      // 1. 处理行合并 (垂直方向合并相同内容的行)
+      if (this.mergeRowMap[colCode] && this.mergeRowMap[colCode][rowIndex] !== undefined) {
         const rowspan = this.mergeRowMap[colCode][rowIndex]
-        if (rowspan > 0) return {rowspan, colspan: 1}
-        else return {rowspan: 0, colspan: 0}
+        if (rowspan > 0) {
+          return { rowspan, colspan: 1 }
+        } else {
+          return { rowspan: 0, colspan: 0 }
+        }
       }
 
-      // mergeColumn
-      if (this.mergeColumnCodes.includes(colCode)) {
+      // 2. 处理列合并 (水平方向合并相同内容的列)
+      // 检查当前单元格是否需要列合并
+      if (row._mergeColumn && row._mergeColumn[colCode]) {
         const currentVal = row[colCode]
         let colspan = 1
 
-        // 向右合并
+        // 向右查找相同值的列
         for (let i = columnIndex + 1; i < this.sortedTitles.length; i++) {
-          const nextCode = this.sortedTitles[i].titleCode
+          const nextCode = this.sortedTitles[i].code
           if (
-            this.mergeColumnCodes.includes(nextCode) &&
+            row._mergeColumn &&
+            row._mergeColumn[nextCode] &&
             row[nextCode] === currentVal
           ) {
             colspan++
@@ -221,23 +285,26 @@ export default {
           }
         }
 
-        // 如果不是合并起点，则隐藏
+        // 检查当前单元格是否是合并的起点
+        // 如果左侧有相同值且需要列合并，则当前单元格应该被隐藏
         for (let i = columnIndex - 1; i >= 0; i--) {
-          const prevCode = this.sortedTitles[i].titleCode
+          const prevCode = this.sortedTitles[i].code
           if (
-            this.mergeColumnCodes.includes(prevCode) &&
+            row._mergeColumn &&
+            row._mergeColumn[prevCode] &&
             row[prevCode] === currentVal
           ) {
-            return {rowspan: 1, colspan: 0}
-          } else {
-            break
+            return { rowspan: 1, colspan: 0 }
           }
         }
 
-        return {rowspan: 1, colspan}
+        if (colspan > 1) {
+          return { rowspan: 1, colspan }
+        }
       }
 
-      return {rowspan: 1, colspan: 1}
+      // 默认不合并
+      return { rowspan: 1, colspan: 1 }
     },
 
     // 表头单元格样式

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserRoleTable :roles="userRoles"></UserRoleTable>
+    <UserRoleTable :roles="userRoles" @grading="handleUserGrading"></UserRoleTable>
   </div>
 </template>
 
