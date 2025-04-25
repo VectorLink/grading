@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.grading.common.constant.Constants;
+import com.grading.common.core.domain.entity.SysRole;
 import com.grading.common.core.domain.entity.SysUser;
 import com.grading.common.core.domain.model.LoginUser;
 import com.grading.common.enums.GradingStatusEnum;
@@ -178,7 +179,8 @@ public class GradingServiceImpl extends ServiceImpl<GradingMapper, Grading> impl
                         return true;
                     }
                     //校验权限
-                    if (loginUser.getPermissions().contains(f.getRightCode())) {
+                    Set<String> roleKeys = loginUser.getUser().getRoles().stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
+                    if (roleKeys.contains(f.getRightCode())) {
                         return true;
                     }
                     return false;

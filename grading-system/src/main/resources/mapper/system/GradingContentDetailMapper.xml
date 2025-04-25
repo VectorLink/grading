@@ -19,11 +19,13 @@
                      left join grading_template_meta m on m.id = c.template_meta_id
             where g2.id = #{gradingId}
               and m.sort = 0
+              and c.system_value = 1
         ) a on a.row_id = gc.row_id
         where g.id = #{gradingId}
           and gc.system_value = 0
+          and gtm.sort >= 1
         <if test="userId != null">
             and gcd.grading_user_id = #{userId}</if>
-        order by  gtm.sort,gc.row_id asc
+        order by gtm.sort, gc.row_id asc
     </select>
 </mapper>

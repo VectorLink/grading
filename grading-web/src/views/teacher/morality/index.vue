@@ -1,7 +1,7 @@
 // HTML Template
 <template>
   <div>
-    <UserRoleTable :roles="userRoles" @grading="handleUserGrading"></UserRoleTable>
+    <UserRoleTable :roles="userRoles" :operation-type=0 @grading="handleUserGrading"></UserRoleTable>
   </div>
 </template>
 

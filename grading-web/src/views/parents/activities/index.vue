@@ -1,5 +1,6 @@
 <template>
   <div class="evaluation-form">
+    <UserRoleTable :roles=this.userRoles :operation-type=1></UserRoleTable>
     <h2 class="title">大足区龙岗幼儿园各类活动家长评价检核表</h2>
     <div class="info">
       <p>评价教师：龙媛媛</p>
@@ -21,9 +22,12 @@
 </template>
 
 <script>
+import UserRoleTable from "@/components/UserRoleTable";
 export default {
+  components: {UserRoleTable},
   data() {
     return {
+      userRoles: ["childteacher", "teacher"],
       tableData: [
         // 家长会
         { category: "家长会", subCategory: "前期准备\n20分", points: ["非常好，几乎是孩子动手做的，很好的展示了孩子的能力。15—20分", "一般，孩子参与的不多，几乎都是老师做的。10—15分", "不好，还是平平常一样。10分以下"], score: "20分", total: "94分" },

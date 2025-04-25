@@ -110,7 +110,8 @@
             type="text"
             icon="el-icon-edit"
             @click="grading(scope.row)"
-          >查看考核表
+          ><span v-if="operationType === 0">查看考核表</span>
+            <span v-else>评价</span>
           </el-button>
         </template>
       </el-table-column>
@@ -132,7 +133,9 @@ export default {
     roles: {
       type: Array,
       default: () => []
-    }
+    },
+    operationType: Number,
+    default: 1
   },
   data() {
     return {
