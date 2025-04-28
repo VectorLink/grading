@@ -19,10 +19,29 @@ export function grading(data) {
     method: 'post'
   })
 }
+
 //获取考核成绩表
-export function getGradingScore(gradingId){
+export function getGradingScore(gradingId) {
   return request({
-    url:'/teacher/getGradingScore/'+parseStrEmpty(gradingId),
+    url: '/teacher/getGradingScore/' + parseStrEmpty(gradingId),
     method: 'get'
+  })
+}
+
+// 获取问卷
+export function getQuestionnaire(data) {
+  return request({
+    url: '/teacher/getQuestionnaire',
+    data: data,
+    method: 'post'
+  })
+}
+
+// 提交问卷
+export function submitQuestionnaire(data) {
+  return request({
+    url: '/teacher/submitQuestionnaire',
+    data: data,
+    method: 'post'
   })
 }

@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import * as path from "path";
 
 /**
  * Note: 路由配置项
@@ -70,7 +71,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/index'),
         name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: {title: '首页', icon: 'dashboard', affix: true}
       }
     ]
   },
@@ -84,7 +85,7 @@ export const constantRoutes = [
         path: 'profile',
         component: () => import('@/views/system/user/profile/index'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        meta: {title: '个人中心', icon: 'user'}
       }
     ]
   },
@@ -96,36 +97,36 @@ export const constantRoutes = [
     children: [
       {
         path: 'biggerGarden',
-        component:()=> import('@/views/child/biggergarden/index'),
+        component: () => import('@/views/child/biggergarden/index'),
         name: 'BiggerGarden',
-        meta: {title: '大班幼儿评教表',icon: 'user'}
+        meta: {title: '大班幼儿评教表', icon: 'user'}
       },
       {
         path: 'middleGarden',
-        component:()=> import('@/views/child/middlegarden/index'),
+        component: () => import('@/views/child/middlegarden/index'),
         name: 'MiddleGarden',
-        meta: {title: '中班班幼儿评教表',icon: 'user'}
+        meta: {title: '中班班幼儿评教表', icon: 'user'}
       },
       {
         path: 'smallGarden',
-        component:()=> import('@/views/child/smallgarden/index'),
+        component: () => import('@/views/child/smallgarden/index'),
         name: 'SmallGarden',
-        meta: {title: '小班幼儿评教表',icon: 'user'}
+        meta: {title: '小班幼儿评教表', icon: 'user'}
       },
       {
         path: 'childFeedback',
-        component:()=> import('@/views/child/childfeedback/index'),
+        component: () => import('@/views/child/childfeedback/index'),
         name: 'ChildFeedback',
-        meta: {title: '儿童委员会评价反馈表',icon: 'user'}
+        meta: {title: '儿童委员会评价反馈表', icon: 'user'}
       },
       {
         path: 'childEvaluationForm',
-        component:()=> import('@/views/child/childevaluationform/index'),
+        component: () => import('@/views/child/childevaluationform/index'),
         name: 'ChildEvaluationForm',
-        meta: {title: '儿童委员会评价表',icon: 'user'}
+        meta: {title: '儿童委员会评价表', icon: 'user'}
       }
     ]
-  },{
+  }, {
     path: '/expert',
     component: Layout,
     hidden: true,
@@ -133,15 +134,15 @@ export const constantRoutes = [
     children: [
       {
         path: 'expertDoor',
-        component:()=> import('@/views/export/door/index'),
+        component: () => import('@/views/export/door/index'),
         name: 'ExpertDoor',
-        meta: {title: '幸福推门听课评分表',icon: 'user'}
+        meta: {title: '幸福推门听课评分表', icon: 'user'}
       },
       {
         path: 'expertClass',
-        component:()=> import('@/views/export/class/index'),
+        component: () => import('@/views/export/class/index'),
         name: 'ExpertClass',
-        meta: {title: '幸福赛课评分表',icon: 'user'}
+        meta: {title: '幸福赛课评分表', icon: 'user'}
       }
     ]
   },
@@ -153,36 +154,42 @@ export const constantRoutes = [
     children: [
       {
         path: 'activities',
-        component:()=> import('@/views/parents/activities/index'),
-        name: 'Activities',
-        meta: {title: '各类活动家长评价检核表',icon: 'user'}
+        component: () => import('@/views/parents/activities/index'),
+        name: 'activities',
+        meta: {title: '各类活动家长评价检核表', icon: 'user'},
+      },
+      {
+        path: 'activitiesDetail',
+        component: () => import('@/views/parents/activities/activities'),
+        name: 'activitiesDetail',
+        meta: {title: '各类活动家长评价检核表详情', icon: 'user'},
       },
       {
         path: 'childActivities',
-        component:()=> import('@/views/parents/childactivities/index'),
+        component: () => import('@/views/parents/childactivities/index'),
         name: 'ChildActivities',
-        meta: {title: '亲子活动家长满意度问卷调查',icon: 'user'}
+        meta: {title: '亲子活动家长满意度问卷调查', icon: 'user'}
       },
       {
         path: 'smallerConference',
-        component:()=> import('@/views/parents/smallerconference/index'),
+        component: () => import('@/views/parents/smallerconference/index'),
         name: 'SmallerConference',
-        meta: {title: '2024小班家长开放日家长满意度问卷调查',icon: 'user'}
+        meta: {title: '2024小班家长开放日家长满意度问卷调查', icon: 'user'}
       },
       {
         path: 'biggerConference',
-        component:()=> import('@/views/parents/biggerconference/index'),
+        component: () => import('@/views/parents/biggerconference/index'),
         name: 'BiggerConference',
-        meta: {title: '2024秋季大班家长会家长满意度问卷调查',icon: 'user'}
+        meta: {title: '2024秋季大班家长会家长满意度问卷调查', icon: 'user'}
       },
       {
         path: 'homeVisit',
-        component:()=> import('@/views/parents/homevisit/index'),
+        component: () => import('@/views/parents/homevisit/index'),
         name: 'HomeVisit',
-        meta: {title: '教师家访家长满意度问卷调查',icon: 'user'}
+        meta: {title: '教师家访家长满意度问卷调查', icon: 'user'}
       },
     ]
-  },{
+  }, {
     path: '/teacher',
     component: Layout,
     redirect: "noredirect",
@@ -190,39 +197,39 @@ export const constantRoutes = [
     children: [
       {
         path: 'teacher',
-        component:()=> import('@/views/teacher/teacher/index'),
+        component: () => import('@/views/teacher/teacher/index'),
         name: 'Teacher',
-        meta: {title: '教师绩效考核',icon: 'user'}
+        meta: {title: '教师绩效考核', icon: 'user'}
       },
       {
         path: 'childcareTeacher',
-        component:()=> import('@/views/teacher/childcareteacher/index'),
+        component: () => import('@/views/teacher/childcareteacher/index'),
         name: 'ChildcareTeacher',
-        meta: {title: '保育教师绩效考核',icon: 'user'}
+        meta: {title: '保育教师绩效考核', icon: 'user'}
       },
       {
         path: 'canteenStaff',
-        component:()=> import('@/views/teacher/canteenstaff/index'),
+        component: () => import('@/views/teacher/canteenstaff/index'),
         name: 'CanteenStaff',
-        meta: {title: '食堂人员绩效考核',icon: 'user'}
+        meta: {title: '食堂人员绩效考核', icon: 'user'}
       },
       {
         path: 'securityGuard',
-        component:()=> import('@/views/teacher/security/index'),
+        component: () => import('@/views/teacher/security/index'),
         name: 'SecurityGuard',
-        meta: {title: '保安人员工作考核',icon: 'user'}
+        meta: {title: '保安人员工作考核', icon: 'user'}
       },
       {
         path: 'morality',
-        component:()=> import('@/views/teacher/morality/index'),
+        component: () => import('@/views/teacher/morality/index'),
         name: 'Morality',
-        meta: {title: '师德师风考核',icon: 'user'}
+        meta: {title: '师德师风考核', icon: 'user'}
       }
     ]
-  },{
+  }, {
     path: "/gradingTable",
-    component: ()=> import('@/components/GradingTable/index'),
-    name:'gradingTable'
+    component: () => import('@/components/GradingTable/index'),
+    name: 'gradingTable'
   }
 ]
 
@@ -238,7 +245,7 @@ export const dynamicRoutes = [
         path: 'role/:userId(\\d+)',
         component: () => import('@/views/system/user/authRole'),
         name: 'AuthRole',
-        meta: { title: '分配角色', activeMenu: '/system/user' }
+        meta: {title: '分配角色', activeMenu: '/system/user'}
       }
     ]
   },
@@ -252,7 +259,7 @@ export const dynamicRoutes = [
         path: 'user/:roleId(\\d+)',
         component: () => import('@/views/system/role/authUser'),
         name: 'AuthUser',
-        meta: { title: '分配用户', activeMenu: '/system/role' }
+        meta: {title: '分配用户', activeMenu: '/system/role'}
       }
     ]
   },
@@ -266,7 +273,7 @@ export const dynamicRoutes = [
         path: 'index/:dictId(\\d+)',
         component: () => import('@/views/system/dict/data'),
         name: 'Data',
-        meta: { title: '字典数据', activeMenu: '/system/dict' }
+        meta: {title: '字典数据', activeMenu: '/system/dict'}
       }
     ]
   },
@@ -280,7 +287,7 @@ export const dynamicRoutes = [
         path: 'index/:jobId(\\d+)',
         component: () => import('@/views/monitor/job/log'),
         name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
+        meta: {title: '调度日志', activeMenu: '/monitor/job'}
       }
     ]
   },
@@ -294,7 +301,7 @@ export const dynamicRoutes = [
         path: 'index/:tableId(\\d+)',
         component: () => import('@/views/tool/gen/editTable'),
         name: 'GenEdit',
-        meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
+        meta: {title: '修改生成配置', activeMenu: '/tool/gen'}
       }
     ]
   }
@@ -314,6 +321,6 @@ Router.prototype.replace = function push(location) {
 
 export default new Router({
   mode: 'history', // 去掉url中的#
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })

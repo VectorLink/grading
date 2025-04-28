@@ -224,12 +224,4 @@ export default {
   margin-bottom: 20px;
 }
 
-.table-operations {
-  margin-bottom: 20px;
-}
-
-.pagination-container {
-  margin-top: 20px;
-  text-align: right;
-}
 </style>
