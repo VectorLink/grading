@@ -167,14 +167,26 @@ export const constantRoutes = [
       {
         path: 'childActivities',
         component: () => import('@/views/parents/childactivities/index'),
-        name: 'ChildActivities',
+        name: 'childActivities',
         meta: {title: '亲子活动家长满意度问卷调查', icon: 'user'}
+      },
+      {
+        path: 'childActivitiesDetail',
+        component: () => import('@/views/parents/childactivities/childactivities'),
+        name: 'childActivitiesDetail',
+        meta: {title: '亲子活动家长满意度问卷调查详情', icon: 'user'}
       },
       {
         path: 'smallerConference',
         component: () => import('@/views/parents/smallerconference/index'),
         name: 'SmallerConference',
-        meta: {title: '2024小班家长开放日家长满意度问卷调查', icon: 'user'}
+        meta: {title: '小班家长开放日家长满意度问卷调查', icon: 'user'}
+      },
+      {
+        path: 'smallerConferenceDetail',
+        component: () => import('@/views/parents/smallerconference/smallerconference'),
+        name: 'smallerConferenceDetail',
+        meta: {title: '小班家长开放日家长满意度问卷调查详情', icon: 'user'}
       },
       {
         path: 'biggerConference',

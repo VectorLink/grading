@@ -1,7 +1,6 @@
 <template>
   <div class="evaluation-form">
     <UserRoleTable :roles="userRoles" :operation-type=1 @grading="handleUserGrading"></UserRoleTable>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -17,8 +16,6 @@ export default {
   },
   methods: {
     handleUserGrading(row) {
-      console.log("==============")
-      // 跳转到评价组件或者打开评价对话框
       this.$router.push({
         name: 'activitiesDetail',
         query: {

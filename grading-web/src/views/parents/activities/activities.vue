@@ -203,9 +203,6 @@ export default {
       try {
         const resp = await getQuestionnaire(this.questionnaireQueryParam);
 
-        // 打印原始数据，用于调试
-        console.log('API返回数据:', resp.data);
-
         // 检查数据有效性
         if (!resp.data || !resp.data.value) {
           this.$message.error('获取数据失败：返回数据格式错误');
@@ -218,9 +215,6 @@ export default {
         try {
           let valueStr = resp.data.value;
           let valueObj = JSON.parse(valueStr);
-
-          console.log('解析后的valueObj:', valueObj);
-
           // 检查解析结果是否有效
           if (!valueObj.title || !Array.isArray(valueObj.title) ||
             !valueObj.value || !Array.isArray(valueObj.value)) {
@@ -234,15 +228,10 @@ export default {
           // 设置表格数据
           this.tableData = valueObj.value;
 
-          console.log('设置的表头:', this.tableColumns);
-          console.log('设置的表格数据:', this.tableData);
-
         } catch (e) {
-          console.error('解析数据失败:', e);
           this.$message.error('解析数据失败，请联系管理员');
         }
       } catch (error) {
-        console.error('获取数据失败:', error);
         this.$message.error('获取数据失败，请重试');
       } finally {
         this.loading = false;
