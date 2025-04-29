@@ -191,14 +191,26 @@ export const constantRoutes = [
       {
         path: 'biggerConference',
         component: () => import('@/views/parents/biggerconference/index'),
-        name: 'BiggerConference',
-        meta: {title: '2024秋季大班家长会家长满意度问卷调查', icon: 'user'}
+        name: 'biggerConference',
+        meta: {title: '大班家长会家长满意度问卷调查', icon: 'user'}
+      },
+      {
+        path: 'biggerConferenceDetail',
+        component: () => import('@/views/parents/biggerconference/biggerconference'),
+        name: 'biggerConferenceDetail',
+        meta: {title: '大班家长会家长满意度问卷调查详情', icon: 'user'}
       },
       {
         path: 'homeVisit',
         component: () => import('@/views/parents/homevisit/index'),
-        name: 'HomeVisit',
+        name: 'homeVisit',
         meta: {title: '教师家访家长满意度问卷调查', icon: 'user'}
+      },
+      {
+        path: 'homeVisit',
+        component: () => import('@/views/parents/homevisit/homevisit'),
+        name: 'homeVisitDetail',
+        meta: {title: '教师家访家长满意度问卷调查详情', icon: 'user'}
       },
     ]
   }, {

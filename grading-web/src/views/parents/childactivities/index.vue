@@ -12,16 +12,7 @@ export default {
   components: {UserRoleTable},
   data() {
     return {
-      surveyForm: {
-        classroom: '',
-        teacherPreparation: '',
-        activityContent: '',
-        teacherOrganization: ''
-      },
-      questionnaireQueryParam: {
-        templateType: 1
-      },
-      userRoles: ["childteacher", "teacher"],
+      userRoles: ["childteacher", "teacher"]
     }
   },
   methods: {
