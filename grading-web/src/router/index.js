@@ -116,14 +116,14 @@ export const constantRoutes = [
       {
         path: 'childFeedback',
         component: () => import('@/views/child/childfeedback/index'),
-        name: 'ChildFeedback',
+        name: 'childFeedback',
         meta: {title: '儿童委员会评价反馈表', icon: 'user'}
       },
       {
-        path: 'childEvaluationForm',
-        component: () => import('@/views/child/childevaluationform/index'),
-        name: 'ChildEvaluationForm',
-        meta: {title: '儿童委员会评价表', icon: 'user'}
+        path: 'childFeedbackDetail',
+        component: () => import('@/views/child/childfeedback/childfeedback'),
+        name: 'childFeedbackDetail',
+        meta: {title: '儿童委员会评价反馈表详情', icon: 'user'}
       }
     ]
   }, {
