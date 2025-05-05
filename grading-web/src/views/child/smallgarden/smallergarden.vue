@@ -92,7 +92,7 @@ export default {
   computed: {
     hasEmptyRecords() {
       // 检查表单中是否有空值
-      return Object.values(this.form).some(value => !value || !value.trim());
+      return Object.values(this.form).some(value => !value || !value.trim);
     }
   },
   methods: {

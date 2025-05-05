@@ -16,7 +16,9 @@ public enum QuestionnaireTypeEnum {
     CHILD_FEEDBACK(5,"儿童委员会评价反馈表"),
     BIGGER_GARDEN(6,"大班幼儿评教表"),
     MIDDLE_GARDEN(7,"中班幼儿评教表"),
-    SMALLER_GARDEN(8,"小班幼儿评教表")
+    SMALLER_GARDEN(8,"小班幼儿评教表"),
+    EXPERT_CLASS(9,"幸福赛课评分表"),
+    EXPERT_DOOR(10,"幸福推门评分表")
     ;
 
     private final Integer code;

@@ -152,15 +152,27 @@ export const constantRoutes = [
     children: [
       {
         path: 'expertDoor',
-        component: () => import('@/views/export/door/index'),
-        name: 'ExpertDoor',
+        component: () => import('@/views/expert/door/index'),
+        name: 'expertDoor',
         meta: {title: '幸福推门听课评分表', icon: 'user'}
       },
       {
+        path: 'expertDoorDetail',
+        component: () => import('@/views/expert/door/expertDoor'),
+        name: 'expertDoorDetail',
+        meta: {title: '幸福推门听课评分表详情', icon: 'user'}
+      },
+      {
         path: 'expertClass',
-        component: () => import('@/views/export/class/index'),
-        name: 'ExpertClass',
+        component: () => import('@/views/expert/class/index'),
+        name: 'expertClass',
         meta: {title: '幸福赛课评分表', icon: 'user'}
+      },
+      {
+        path: 'expertClassDetail',
+        component: () => import('@/views/expert/class/expertClass'),
+        name: 'expertClassDetail',
+        meta: {title: '幸福赛课评分表详情', icon: 'user'}
       }
     ]
   },
