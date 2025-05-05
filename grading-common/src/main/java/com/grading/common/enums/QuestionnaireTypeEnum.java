@@ -13,7 +13,10 @@ public enum QuestionnaireTypeEnum {
     SMALLER_CONFERENCE(2,"小班家长开放日家长满意度问卷调查"),
     BIGGER_CONFERENCE(3,"大班家长会家长满意度问卷调查"),
     HOME_VISIT(4,"教师家访家长满意度问卷调查"),
-    CHILD_FEEDBACK(5,"儿童委员会评价反馈表")
+    CHILD_FEEDBACK(5,"儿童委员会评价反馈表"),
+    BIGGER_GARDEN(6,"大班幼儿评教表"),
+    MIDDLE_GARDEN(7,"中班幼儿评教表"),
+    SMALLER_GARDEN(8,"小班幼儿评教表")
     ;
 
     private final Integer code;

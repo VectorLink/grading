@@ -102,16 +102,34 @@ export const constantRoutes = [
         meta: {title: '大班幼儿评教表', icon: 'user'}
       },
       {
+        path: 'biggerGardenDetail',
+        component: () => import('@/views/child/biggergarden/biggergarden'),
+        name: 'biggerGardenDetail',
+        meta: {title: '大班幼儿评教表详情表', icon: 'user'}
+      },
+      {
         path: 'middleGarden',
         component: () => import('@/views/child/middlegarden/index'),
-        name: 'MiddleGarden',
+        name: 'middleGarden',
         meta: {title: '中班班幼儿评教表', icon: 'user'}
+      },
+      {
+        path: 'middleGardenDetail',
+        component: () => import('@/views/child/middlegarden/middlegarden'),
+        name: 'middleGardenDetail',
+        meta: {title: '中班班幼儿评教详情表', icon: 'user'}
       },
       {
         path: 'smallGarden',
         component: () => import('@/views/child/smallgarden/index'),
-        name: 'SmallGarden',
+        name: 'smallGarden',
         meta: {title: '小班幼儿评教表', icon: 'user'}
+      },
+      {
+        path: 'smallGardenDetail',
+        component: () => import('@/views/child/smallgarden/smallergarden'),
+        name: 'SmallGardenDetail',
+        meta: {title: '小班幼儿评教详情表', icon: 'user'}
       },
       {
         path: 'childFeedback',
