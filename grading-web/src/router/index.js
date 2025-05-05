@@ -128,7 +128,7 @@ export const constantRoutes = [
       {
         path: 'smallGardenDetail',
         component: () => import('@/views/child/smallgarden/smallergarden'),
-        name: 'SmallGardenDetail',
+        name: 'smallGardenDetail',
         meta: {title: '小班幼儿评教详情表', icon: 'user'}
       },
       {
