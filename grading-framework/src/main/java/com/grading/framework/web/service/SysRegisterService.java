@@ -20,7 +20,7 @@ import com.grading.system.service.ISysUserService;
 
 /**
  * 注册校验方法
- * 
+ *
  * @author ruoyi
  */
 @Component
@@ -40,42 +40,41 @@ public class SysRegisterService
      */
     public String register(RegisterBody registerBody)
     {
-        String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
+        String msg = "", phoneNumber = registerBody.getPhoneNumber(), password = registerBody.getPassword();
         SysUser sysUser = new SysUser();
-        sysUser.setUserName(username);
+        sysUser.setPhonenumber(phoneNumber);
 
         // 验证码开关
         boolean captchaEnabled = configService.selectCaptchaEnabled();
         if (captchaEnabled)
         {
-            validateCaptcha(username, registerBody.getCode(), registerBody.getUuid());
+            validateCaptcha(phoneNumber, registerBody.getCode(), registerBody.getUuid());
         }
 
-        if (StringUtils.isEmpty(username))
+        if (StringUtils.isEmpty(phoneNumber))
         {
-            msg = "用户名不能为空";
+            msg = "手机号码不能为空";
         }
         else if (StringUtils.isEmpty(password))
         {
             msg = "用户密码不能为空";
         }
-        else if (username.length() < UserConstants.USERNAME_MIN_LENGTH
-                || username.length() > UserConstants.USERNAME_MAX_LENGTH)
+        else if (phoneNumber.length() != UserConstants.PHONE_NUMBER_LENGTH)
         {
-            msg = "账户长度必须在2到20个字符之间";
+            msg = "账户长度必须等于11个字符之间";
         }
         else if (password.length() < UserConstants.PASSWORD_MIN_LENGTH
                 || password.length() > UserConstants.PASSWORD_MAX_LENGTH)
         {
             msg = "密码长度必须在5到20个字符之间";
         }
-        else if (!userService.checkUserNameUnique(sysUser))
+        else if (!userService.checkPhoneUnique(sysUser))
         {
-            msg = "保存用户'" + username + "'失败，注册账号已存在";
+            msg = "保存用户'" + sysUser.getPhonenumber() + "'失败，注册账号已存在";
         }
         else
         {
-            sysUser.setNickName(username);
+            sysUser.setNickName(phoneNumber);
             sysUser.setPassword(SecurityUtils.encryptPassword(password));
             boolean regFlag = userService.registerUser(sysUser);
             if (!regFlag)
@@ -84,7 +83,7 @@ public class SysRegisterService
             }
             else
             {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER, MessageUtils.message("user.register.success")));
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(phoneNumber, Constants.REGISTER, MessageUtils.message("user.register.success")));
             }
         }
         return msg;
@@ -92,7 +91,7 @@ public class SysRegisterService
 
     /**
      * 校验验证码
-     * 
+     *
      * @param username 用户名
      * @param code 验证码
      * @param uuid 唯一标识

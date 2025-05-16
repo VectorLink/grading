@@ -4,7 +4,7 @@
       <h3 class="title">{{title}}</h3>
       <el-form-item prop="username">
         <el-input
-          v-model="loginForm.username"
+          v-model="loginForm.phoneNumber"
           type="text"
           auto-complete="off"
           placeholder="账号"
@@ -73,15 +73,15 @@ export default {
       title: process.env.VUE_APP_LOGIN_TITLE,
       codeUrl: "",
       loginForm: {
-        username: "admin",
+        phoneNumber: "admin",
         password: "admin123",
         rememberMe: false,
         code: "",
         uuid: ""
       },
       loginRules: {
-        username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" }
+        phoneNumber: [
+          { required: true, trigger: "blur", message: "请输入您的手机号" }
         ],
         password: [
           { required: true, trigger: "blur", message: "请输入您的密码" }
@@ -119,11 +119,11 @@ export default {
       });
     },
     getCookie() {
-      const username = Cookies.get("username");
+      const phoneNumber = Cookies.get("phoneNumber");
       const password = Cookies.get("password");
       const rememberMe = Cookies.get('rememberMe')
       this.loginForm = {
-        username: username === undefined ? this.loginForm.username : username,
+        phoneNumber: phoneNumber === undefined ? this.loginForm.phoneNumber : phoneNumber,
         password: password === undefined ? this.loginForm.password : decrypt(password),
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
       };
@@ -133,11 +133,11 @@ export default {
         if (valid) {
           this.loading = true;
           if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, { expires: 30 });
+            Cookies.set("phoneNumber", this.loginForm.phoneNumber, { expires: 30 });
             Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
             Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
           } else {
-            Cookies.remove("username");
+            Cookies.remove("phoneNumber");
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }

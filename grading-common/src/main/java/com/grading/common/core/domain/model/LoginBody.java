@@ -2,7 +2,7 @@ package com.grading.common.core.domain.model;
 
 /**
  * 用户登录对象
- * 
+ *
  * @author ruoyi
  */
 public class LoginBody
@@ -10,7 +10,7 @@ public class LoginBody
     /**
      * 用户名
      */
-    private String username;
+    private String phoneNumber;
 
     /**
      * 用户密码
@@ -27,14 +27,14 @@ public class LoginBody
      */
     private String uuid;
 
-    public String getUsername()
+    public String getPhoneNumber()
     {
-        return username;
+        return phoneNumber;
     }
 
-    public void setUsername(String username)
+    public void setPhoneNumber(String phoneNumber)
     {
-        this.username = username;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword()

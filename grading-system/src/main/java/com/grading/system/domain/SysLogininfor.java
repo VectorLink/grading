@@ -8,7 +8,7 @@ import com.grading.common.core.domain.BaseEntity;
 
 /**
  * 系统访问记录表 sys_logininfor
- * 
+ *
  * @author ruoyi
  */
 public class SysLogininfor extends BaseEntity
@@ -20,8 +20,8 @@ public class SysLogininfor extends BaseEntity
     private Long infoId;
 
     /** 用户账号 */
-    @Excel(name = "用户账号")
-    private String userName;
+    @Excel(name = "用户电话号码")
+    private String phoneNumber;
 
     /** 登录状态 0成功 1失败 */
     @Excel(name = "登录状态", readConverterExp = "0=成功,1=失败")
@@ -62,14 +62,14 @@ public class SysLogininfor extends BaseEntity
         this.infoId = infoId;
     }
 
-    public String getUserName()
+    public String getPhoneNumber()
     {
-        return userName;
+        return phoneNumber;
     }
 
-    public void setUserName(String userName)
+    public void setPhoneNumber(String phoneNumber)
     {
-        this.userName = userName;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getStatus()

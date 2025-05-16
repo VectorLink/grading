@@ -28,7 +28,6 @@ import com.grading.common.utils.SecurityUtils;
 import com.grading.common.utils.StringUtils;
 import com.grading.common.utils.poi.ExcelUtil;
 import com.grading.system.model.param.UserRoleParam;
-import com.grading.system.model.resp.UserModelResp;
 import com.grading.system.service.ISysDeptService;
 import com.grading.system.service.ISysPostService;
 import com.grading.system.service.ISysRoleService;
@@ -36,7 +35,7 @@ import com.grading.system.service.ISysUserService;
 
 /**
  * 用户信息
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -128,9 +127,9 @@ public class SysUserController extends BaseController
     {
         deptService.checkDeptDataScope(user.getDeptId());
         roleService.checkRoleDataScope(user.getRoleIds());
-        if (!userService.checkUserNameUnique(user))
+        if (StringUtils.isBlank(user.getPhonenumber()))
         {
-            return error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
+            return error("新增用户电话号码不能为空！");
         }
         else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
         {
@@ -157,9 +156,9 @@ public class SysUserController extends BaseController
         userService.checkUserDataScope(user.getUserId());
         deptService.checkDeptDataScope(user.getDeptId());
         roleService.checkRoleDataScope(user.getRoleIds());
-        if (!userService.checkUserNameUnique(user))
+        if (StringUtils.isBlank(user.getPhonenumber()))
         {
-            return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
+            return error("修改用户电话号码不能为空！");
         }
         else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
         {
