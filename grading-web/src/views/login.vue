@@ -73,8 +73,8 @@ export default {
       title: process.env.VUE_APP_LOGIN_TITLE,
       codeUrl: "",
       loginForm: {
-        phoneNumber: "admin",
-        password: "admin123",
+        phoneNumber: "",
+        password: "",
         rememberMe: false,
         code: "",
         uuid: ""
