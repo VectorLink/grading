@@ -27,4 +27,8 @@ public class UserRoleParam extends BaseEntity {
      * 用户电话
      */
     private String telephone;
+    /**
+     * 部门ID
+     */
+    private Long deptId;
 }

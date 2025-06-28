@@ -244,6 +244,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and su.nick_name like concat(#{userName},'%')</if>
 			<if test="telephone != null and telephone != ''">
 				and su.phonenumber = #{telephone}</if>
+			<if test="deptId!=null">
+				and su.dept_id=#{deptId}
+			</if>
 		</where>
 		group by su.user_id
 	</select>

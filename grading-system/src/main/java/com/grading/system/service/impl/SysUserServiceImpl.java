@@ -2,6 +2,7 @@ package com.grading.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.Validator;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import com.grading.common.annotation.DataScope;
 import com.grading.common.constant.UserConstants;
 import com.grading.common.core.domain.entity.SysRole;
 import com.grading.common.core.domain.entity.SysUser;
+import com.grading.common.core.domain.model.LoginUser;
+import com.grading.common.enums.RoleTypeEnum;
 import com.grading.common.exception.ServiceException;
 import com.grading.common.utils.SecurityUtils;
 import com.grading.common.utils.StringUtils;
@@ -487,7 +490,7 @@ public class SysUserServiceImpl implements ISysUserService
             try
             {
                 // 验证是否存在这个用户
-                SysUser u = userMapper.selectUserByUserName(user.getUserName());
+                SysUser u = userMapper.selectUserByTelephone(user.getPhonenumber());
                 if (StringUtils.isNull(u))
                 {
                     BeanValidators.validateWithException(validator, user);
@@ -497,7 +500,7 @@ public class SysUserServiceImpl implements ISysUserService
                     user.setCreateBy(operName);
                     userMapper.insertUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 导入成功");
+                    successMsg.append("<br/>" + successNum + "、账号 " + user.getPhonenumber() + " 导入成功");
                 }
                 else if (isUpdateSupport)
                 {
@@ -509,18 +512,18 @@ public class SysUserServiceImpl implements ISysUserService
                     user.setUpdateBy(operName);
                     userMapper.updateUser(user);
                     successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getUserName() + " 更新成功");
+                    successMsg.append("<br/>" + successNum + "、账号 " + user.getPhonenumber() + " 更新成功");
                 }
                 else
                 {
                     failureNum++;
-                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getUserName() + " 已存在");
+                    failureMsg.append("<br/>" + failureNum + "、账号 " + user.getPhonenumber() + " 已存在");
                 }
             }
             catch (Exception e)
             {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + user.getUserName() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、账号 " + user.getPhonenumber() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }
@@ -539,6 +542,12 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Override
     public List<UserModelResp> listUserByRole(UserRoleParam param) {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        Set<String> roleKeys = loginUser.getUser().getRoles()
+                .stream().map(SysRole::getRoleKey).collect(Collectors.toSet());
+        if (roleKeys.contains(RoleTypeEnum.PARENTS.getPermissionCode())) {
+            param.setDeptId(loginUser.getDeptId());
+        }
         return userMapper.listUserByRole(param);
     }
 }
