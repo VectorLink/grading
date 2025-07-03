@@ -2,7 +2,7 @@
 <configuration>
     <property name="app_name" value="grading"></property>
     <!-- 日志存放路径 -->
-	<property name="log.path" value="/var/logs/${app_name}" />
+	<property name="log.path" value="/var/log/${app_name}" />
     <!-- 日志输出格式 -->
 	<property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
 
